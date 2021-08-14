@@ -1,6 +1,7 @@
 const router = require('koa-router')()
 const config = require('../config')
 const userCon = require('../controller/users')
+const contro = require('../controller/index') //操作数据库的公共方法调用
 router.prefix(config.api + '/user')
 
 //jwt登录
@@ -15,6 +16,8 @@ router.post('/deleteUser', userCon.deleteUser)
 router.post('/updateUser', userCon.updateUser) 
 //新增用户
 router.post('/createUser', userCon.createUser)
+//修改密码
+router.post('/updatePassword', userCon.updatePassword) 
 
 
 module.exports = router
