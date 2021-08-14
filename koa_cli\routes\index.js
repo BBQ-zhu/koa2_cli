@@ -8,7 +8,7 @@ const {return200,return500} = require('../config/error')
 router.prefix(config.api)
 
 router.get('/', async (ctx, next) => {
-   ctx.body = '欢迎使用koa2!!!' // ctx.query
+   ctx.body = '欢迎!!!' // ctx.query
 })
 
 router.post('/checkToken', async (ctx) => {
