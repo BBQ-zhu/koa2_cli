@@ -7,9 +7,12 @@ const {
 } = require('../config/error')
 const jsonwebtoken = require('jsonwebtoken'); //加密生成token
 const config = require('../config')
-const {navMenu} = require('../models/navMenus')
+const {
+  navMenu
+} = require('../models/navMenus')
 const fs = require('fs')
 const path = require('path')
+
 
 
 //上传文件公共方法
@@ -72,91 +75,206 @@ const login = (model, data, ctx) => (
 let navMenuList = [
   {
     path: '/Home',
-    name:'网站管理',
-    id:1,
-    icon:'el-icon-location',
+    name: '首页',
+    id: 1,
+    icon: 'el-icon-menu',
     show: false,
     component: '',
     redirect: '',
-    children:[
-      {
-        path: '/WebControl',
-        name:'网站管理',
-        id:2,
-        icon:'el-icon-location',
+    children: [{
+      path: '/Agents',
+      name: '代办中心',
+      id: 2,
+      icon: 'el-icon-bell',
+      show: false,
+      component: ''
+    }]
+  },
+  {
+    path: '/Home',
+    name: '前端管理',
+    id: 3,
+    icon: 'el-icon-s-data',
+    show: false,
+    component: '',
+    redirect: '',
+    children: [{
+        path: '/ScroImage',
+        name: '轮播图',
+        id: 4,
+        icon: 'el-icon-picture',
         show: false,
         component: ''
       },
       {
-        path: '/VipUser',
-        name:'会员用户',
-        id:3,
-        icon:'el-icon-location',
+        path: '/WebControl',
+        name: '新闻管理',
+        id: 5,
+        icon: 'el-icon-notebook-2',
+        show: false,
+        component: ''
+      },
+      {
+        path: '/Product',
+        name: '产品管理',
+        id: 6,
+        icon: 'el-icon-s-shop',
         show: false,
         component: ''
       },
       {
         path: '/EntrSchool',
-        name:'创业者学堂',
-        id:7,
-        icon:'el-icon-location',
+        name: '创业学堂',
+        id: 7,
+        icon: 'el-icon-s-platform',
         show: false,
         component: ''
       },
+      {
+        path: '/Recruiting',
+        name: '招聘专区',
+        id: 8,
+        icon: 'el-icon-files',
+        show: false,
+        component: ''
+      }
     ]
   },
   {
     path: '/Home',
-    name:'权限管控',
-    id:4,
-    icon:'el-icon-location',
+    name: '业务中心',
+    id: 9,
+    icon: 'el-icon-s-grid',
     show: false,
-    component: 'Home',
+    component: '',
     redirect: '',
-    children:[
+    children: [
+      {
+        path: '/Integrate',
+        name: '综合服务',
+        id: 10,
+        icon: 'el-icon-coin',
+        show: false,
+        component: ''
+      }
+    ]
+  },
+  {
+    path: '/Home',
+    name: '资料中心',
+    id: 11,
+    icon: 'el-icon-edit-outline',
+    show: false,
+    component: '',
+    redirect: '',
+    children: [{
+        path: '/Contract',
+        name: '合同中心',
+        id: 12,
+        icon: 'el-icon-folder-opened',
+        show: false,
+        component: ''
+      },
+      {
+        path: '/Customer',
+        name: '贷款资料',
+        id: 13,
+        icon: 'el-icon-user',
+        show: false,
+        component: ''
+      },
+      {
+        path: '/Enterprise',
+        name: '企业资料',
+        id: 14,
+        icon: 'el-icon-user',
+        show: false,
+        component: ''
+      }
+    ]
+  },
+  {
+    path: '/Home',
+    name: '权限管控',
+    id: 15,
+    icon: 'el-icon-setting',
+    show: false,
+    component: '',
+    redirect: '',
+    children: [
+      {
+        path: '/Client',
+        name: '客户管理',
+        id: 16,
+        icon: 'el-icon-user-solid',
+        show: false,
+        component: ''
+      },
       {
         path: '/Works',
-        name:'员工管理',
-        id:5,
-        icon:'el-icon-location',
+        name: '员工管理',
+        id: 17,
+        icon: 'el-icon-user-solid',
         show: false,
-        component: 'Works'
+        component: ''
       },
       {
         path: '/Roles',
-        name:'角色管理',
-        id:6,
-        icon:'el-icon-location',
+        name: '身份管理',
+        id: 18,
+        icon: 'el-icon-s-flag',
         show: false,
-        component: 'Roles'
+        component: ''
+      }
+    ]
+  },
+  {
+    path: '/Home',
+    name: '系统中心',
+    id: 19,
+    icon: 'el-icon-s-help',
+    show: false,
+    component: '',
+    redirect: '',
+    children: [{
+        path: '/Operation',
+        name: '操作记录',
+        id: 20,
+        icon: 'el-icon-view',
+        show: false,
+        component: ''
       }
     ]
   }
 ]
 
 //校验导航菜单是否已存在数据库，然后再登录
-const AddNavMenu = async (model, data,ctx)=>{
+const AddNavMenu = async (model, data, ctx) => {
   var newList = {
-    "navMenuList":navMenuList
+    "navMenuList": navMenuList
   }
-  await navMenu.findOneAndReplace({"name":"navMenu"},newList).then(async rel=>{
-    if(rel){
+  await navMenu.findOneAndReplace({
+    "name": "navMenu"
+  }, newList).then(async rel => {
+    if (rel) {
       await login(model, data, ctx)
-    }else{
+    } else {
       await navMenu.create({
         "name": "navMenu",
         "navMenuList": navMenuList
-      }).then(async rel=>{
-        if(rel){
+      }).then(async rel => {
+        if (rel) {
           await login(model, data, ctx)
-        }else{return500("创建导航菜单失败",null,ctx)}
-      }).catch(err=>{
-        return500("创建导航菜单失败",err,ctx)
+        } else {
+          return500("创建导航菜单失败", null, ctx)
+        }
+      }).catch(err => {
+        return500("创建导航菜单失败", err, ctx)
       })
     }
-  }).catch(err=>{
+  }).catch(err => {
     console.log(err)
-    return500("创建导航菜单失败",err,ctx)
+    return500("创建导航菜单失败", err, ctx)
   })
 }
 
