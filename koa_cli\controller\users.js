@@ -1,7 +1,6 @@
 const model = require('../models/users')
 const ids = require('../models/ids')
 const contro = require('./index') //操作数据库的公共方法调用
-const svgCaptcha = require('svg-captcha') //生成图形验证码
 const {
   return200,
   return500
@@ -11,39 +10,42 @@ const {
 const findUser = async ctx => {
   let data = ctx.request.body
   var match = {}
-  if(data.input){
-    match[data.fuzz] = {$regex:data.input}
-  }
-  await model.User.aggregate([
-    { $match : match },
-    { $project : {
-        _id : 0 ,
-        password : 0 ,
-        __v : 0
-      }
-    },
-    {
-      "$facet": {
-        "total": [{
-          "$count": "total"
-        }],
-        "data": [{
-            "$skip": Number(data.skip)
-          },
-          {
-            "$limit": Number(data.limit)
-          }
-        ]
-      }
+  if (data.input) {
+    match[data.fuzz] = {
+      $regex: data.input
     }
-  ])
-  .then(rel => {
-    console.log(rel)
-    rel ? return200('查询成功', rel, ctx) : return500('查询失败', null, ctx)
-  })
-  .catch(err => {
-    return500('查询失败', err, ctx)
-  })
+  }
+  await model.User.aggregate([{
+        $match: match
+      }, //用于过滤数据
+      {
+        $project: {
+          password: 0,
+          __v: 0
+        }
+      },
+      {
+        "$facet": {
+          "total": [{
+            "$count": "total"
+          }],
+          "data": [{
+              "$skip": Number(data.skip)
+            },
+            {
+              "$limit": Number(data.limit)
+            }
+          ]
+        }
+      }
+    ])
+    .then(rel => {
+      console.log(rel)
+      rel ? return200('查询成功', rel, ctx) : return500('查询失败', null, ctx)
+    })
+    .catch(err => {
+      return500('查询失败', err, ctx)
+    })
 }
 
 const deleteUser = async ctx => {
@@ -67,7 +69,9 @@ const updateUser = async ctx => {
     role,
     phone
   } = ctx.request.body
-  await model.User.updateOne({uid:uid}, data)
+  await model.User.updateOne({
+      uid: uid
+    }, data)
     .then(rel => {
       rel ? return200('更新成功', null, ctx) : return500('更新失败', null, ctx)
     })
@@ -110,15 +114,17 @@ const updatePassword = async ctx => {
 
   let data = ctx.request.body
   let newData = {
-    password:data.newPassword
+    password: data.newPassword
   }
-  console.log(data,newData)
-  await model.User.findOneAndUpdate ({uid:data.uid,password:data.oldPassword},newData).then(rel=>{
-    if(rel){
+  await model.User.findOneAndUpdate({
+    uid: data.uid,
+    password: data.oldPassword
+  }, newData).then(rel => {
+    if (rel) {
       console.log(rel)
       return200('修改密码成功', null, ctx)
     }
-  }).catch(err=>{
+  }).catch(err => {
     return500('修改密码失败', err, ctx)
   })
 }
@@ -132,6 +138,7 @@ const createUser = async ctx => {
     role,
     phone
   } = ctx.request.body
+  data.time = new Date().toLocaleString()
   await ids.Ids.findOne({
     "name": "ids"
   }).then(async rel => { //获取唯一ID值作为员工工号
