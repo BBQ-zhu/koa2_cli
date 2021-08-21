@@ -21,3 +21,4 @@ router.post('/updatePassword', userCon.updatePassword)
 
 
 module.exports = router
+ 
