@@ -1,3 +1,12 @@
+更新过的文件：
+前端：
+src\request\api.js
+src\views\Product.vue
+后端：
+models\product.js
+routes\product.js
+app.js
+
 教学网址：https://blog.csdn.net/weixin_46182770/article/details/112974311
 
 全局安装koa的脚手架（只需要安装一次）：npm install koa-generator -g
