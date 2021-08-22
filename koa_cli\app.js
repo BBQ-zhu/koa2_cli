@@ -28,6 +28,7 @@ app.use(koajwt({
     /^\/uploads\/schoolVideo/,
     /^\/uploads\/scroImgs/,
     /^\/uploads\/products/,
+    /^\/uploads\/icons/,
     /^\/api\/editor\/controller/,
     /^\/upload\/ueditor\/image/
   ]
@@ -39,8 +40,8 @@ const users = require('./routes/users')
 const roles = require('./routes/roles')
 const uploads = require('./routes/uploads')
 const informations = require('./routes/informations')
-const product = require('./routes/product') 
-const customer = require('./routes/customer') 
+const product = require('./routes/product')
+const customer = require('./routes/customer')
 const integrate = require('./routes/integrate')
 
 app.use(KoaBody())
@@ -68,7 +69,7 @@ app.use(jsonerror())
 app.use(parameter(app))
 app.use(json())
 app.use(logger())
-app.use(require('koa-static')(__dirname + '/public')) 
+app.use(require('koa-static')(__dirname + '/public'))
 
 // logger打印接口请求日志
 app.use(async (ctx, next) => {
@@ -84,8 +85,8 @@ app.use(users.routes(), users.allowedMethods())
 app.use(roles.routes(), users.allowedMethods())
 app.use(uploads.routes(), uploads.allowedMethods())
 app.use(informations.routes(), informations.allowedMethods())
-app.use(product.routes(), product.allowedMethods()) 
-app.use(customer.routes(), customer.allowedMethods()) 
+app.use(product.routes(), product.allowedMethods())
+app.use(customer.routes(), customer.allowedMethods())
 app.use(integrate.routes(), integrate.allowedMethods())
 // error-handling
 app.on('error', (err, ctx) => {
