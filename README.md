@@ -1,11 +1,20 @@
 更新过的文件：
 前端：
-src\request\api.js
 src\views\Product.vue
+src\assets\js\common.js
+src\views\Contract.vue
+src\request\api.js
+src\views\EntrSchool.vue
+src\views\Login.vue
+
 后端：
-models\product.js
-routes\product.js
 app.js
+models\contract.js
+routes\contract.js
+routes\uploads.js
+models\videos.js
+
+
 
 教学网址：https://blog.csdn.net/weixin_46182770/article/details/112974311
 
