@@ -29,6 +29,7 @@ app.use(koajwt({
     /^\/uploads\/scroImgs/,
     /^\/uploads\/products/,
     /^\/uploads\/icons/,
+    /^\/uploads\/contracts/,
     /^\/api\/editor\/controller/,
     /^\/upload\/ueditor\/image/
   ]
@@ -43,6 +44,7 @@ const informations = require('./routes/informations')
 const product = require('./routes/product')
 const customer = require('./routes/customer')
 const integrate = require('./routes/integrate')
+const contract = require('./routes/contract')
 
 app.use(KoaBody())
 
@@ -87,7 +89,10 @@ app.use(uploads.routes(), uploads.allowedMethods())
 app.use(informations.routes(), informations.allowedMethods())
 app.use(product.routes(), product.allowedMethods())
 app.use(customer.routes(), customer.allowedMethods())
-app.use(integrate.routes(), integrate.allowedMethods())
+app.use(integrate.routes(), integrate.allowedMethods()) 
+app.use(contract.routes(), contract.allowedMethods()) 
+
+
 // error-handling
 app.on('error', (err, ctx) => {
   console.error('server error', err, ctx)
