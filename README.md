@@ -6,7 +6,7 @@ src\views\Contract.vue
 src\request\api.js
 src\views\EntrSchool.vue
 src\views\Login.vue
-
+src\assets\css\release.css
 后端：
 app.js
 models\contract.js
