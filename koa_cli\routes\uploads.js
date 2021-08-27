@@ -11,6 +11,10 @@ router.post('/uploadImg',uploads.uploadImg)
 //删除图片
 router.post('/delateImg', uploads.delateImg)
 
+//上传视频封面
+router.post('/uploadVideoImg',KoaBody({multipart: true}),uploads.uploadVideoImg)
+//删除视频封面
+router.post('/delateVideoImg',uploads.delateVideoImg)
 //上传视频
 router.post('/uploadVideo',KoaBody({multipart: true}),uploads.uploadVideo)
 //查询school视频
