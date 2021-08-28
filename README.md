@@ -1,19 +1,9 @@
 更新过的文件：
 前端：
-src\views\Product.vue
-src\assets\js\common.js
-src\views\Contract.vue
-src\request\api.js
-src\views\EntrSchool.vue
-src\views\Login.vue
-src\assets\css\release.css
-后端：
-app.js
-models\contract.js
-routes\contract.js
-routes\uploads.js
-models\videos.js
 
+后端：
+
+忘了传视频routers
 
 
 教学网址：https://blog.csdn.net/weixin_46182770/article/details/112974311
