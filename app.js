@@ -12,6 +12,9 @@ const koajwt = require('koa-jwt'); //所有接口校验token
 const config = require('./config') //常量库
 const MongoConnect = require('./db')() //建立数据库连接
 
+// const logs = require('./controller/logs') //操作日志中间件
+
+// app.use(logs())
 
 // 中间件对token进行验证 注意：放在路由前面
 app.use(koajwt({
@@ -19,7 +22,7 @@ app.use(koajwt({
 }).unless({
   // 登录接口不需要验证
   path: [ // 不需要做校验的接口在此处匹配  \/ 转译斜杠
-    /^\/api\/user\/loginUser/,
+    /^\/api\/user\/loginuser/,
     /^\/api\/user\/createUser/,
     /^\/api\/roles\/findNavMenus/,
     /^\/api\/roles\/findRole/,
@@ -31,7 +34,21 @@ app.use(koajwt({
     /^\/uploads\/icons/,
     /^\/uploads\/contracts/,
     /^\/api\/editor\/controller/,
-    /^\/upload\/ueditor\/image/
+    /^\/upload\/ueditor\/image/,
+    /^\/upload\/ueditor\/image/,
+    /^\/api\/vipuser\/getCodeVipuser/,
+    /^\/api\/vipuser\/findVipuser/,
+    /^\/api\/vipuser\/updateVipuser/,
+    /^\/api\/vipuser\/createVipuser/,
+    /^\/api\/vipuser\/loginVipuser/,
+    /^\/uploads\/productLogo/,
+    /^\/api\/uploads\/findScrollImg/,
+    /^\/api\/uploads\/findProduct/,
+    /^\/api\/uploads\/findProductClass/,
+    /^\/api\/uploads\/findVideo/,
+    /^\/api\/uploads\/findRecruiting/,
+    /^\/api\/vipuser\/checkCodeVipuser/,
+    /^\/api\/logs\/createlogs/,
   ]
 }));
 
@@ -45,6 +62,9 @@ const product = require('./routes/product')
 const customer = require('./routes/customer')
 const integrate = require('./routes/integrate')
 const contract = require('./routes/contract')
+const agents = require('./routes/agents')
+const vipUser = require('./routes/Mobile/vipUser') //手机用户
+const logs = require('./routes/logs')
 
 app.use(KoaBody())
 
@@ -73,7 +93,7 @@ app.use(json())
 app.use(logger())
 app.use(require('koa-static')(__dirname + '/public'))
 
-// logger打印接口请求日志
+// logger打印接口请求日志 中间件
 app.use(async (ctx, next) => {
   const start = new Date()
   await next()
@@ -91,11 +111,13 @@ app.use(product.routes(), product.allowedMethods())
 app.use(customer.routes(), customer.allowedMethods())
 app.use(integrate.routes(), integrate.allowedMethods()) 
 app.use(contract.routes(), contract.allowedMethods()) 
-
+app.use(agents.routes(), agents.allowedMethods())
+app.use(vipUser.routes(), vipUser.allowedMethods())
+app.use(logs.routes(), logs.allowedMethods())
 
 // error-handling
 app.on('error', (err, ctx) => {
-  console.error('server error', err, ctx)
+  console.error('server error:', err, ctx)
 });
 
 module.exports = app
