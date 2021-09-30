@@ -43,7 +43,7 @@ router.post('/delTeam', async (ctx)=>{
   })
 }) 
 //查询团队
-router.get('/findTeam',async (ctx)=>{
+router.post('/findTeam',async (ctx)=>{
   await teams.find().then(rel=>{
     return200('查询成功',rel,ctx)
   })
