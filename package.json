@@ -9,7 +9,9 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
+    "@alicloud/pop-core": "^1.7.10",
     "debug": "^4.1.1",
+    "image-tools": "^1.4.0",
     "jsonwebtoken": "^8.5.1",
     "koa": "^2.7.0",
     "koa-body": "^4.2.0",
