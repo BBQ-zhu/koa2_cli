@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 
 
-//企业资料
+//企业资料 
 const enterpriseSchema = new mongoose.Schema({
   type:{type:String,default:''}, //代理记账、企业注册
   entername:{type:String,default:''}, //企业名称
@@ -14,6 +14,10 @@ const enterpriseSchema = new mongoose.Schema({
   main:String, //主营项目
   scope:String, //经营范围
   accout:String, //天府通账号
+  manager1: String, //客户经理
+  manager2: String, //权证经理
+  manager3: String, //审核经理
+  status: String, //审核状态
   remarks:String, //备注
   time:{type:String,default:''}
 })
