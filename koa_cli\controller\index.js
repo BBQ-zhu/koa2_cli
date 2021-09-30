@@ -49,7 +49,7 @@ const login = (model, data, ctx) => (
     password: 0,
     __v: 0
   })
-  .then(rel => {
+  .then(rel => { 
     if (rel) {
       let token = jsonwebtoken.sign({
           name: rel.username,
@@ -87,6 +87,7 @@ let navMenuList = [
       id: 2,
       icon: 'el-icon-bell',
       show: false,
+      meth:['查询'],
       component: ''
     }]
   },
@@ -100,10 +101,11 @@ let navMenuList = [
     redirect: '',
     children: [{
         path: '/ScroImage',
-        name: '轮播图',
+        name: '轮播图片',
         id: 4,
         icon: 'el-icon-picture',
         show: false,
+        meth:['查询'],
         component: ''
       },
       {
@@ -112,6 +114,7 @@ let navMenuList = [
         id: 5,
         icon: 'el-icon-notebook-2',
         show: false,
+        meth:['查询'],
         component: ''
       },
       {
@@ -120,6 +123,7 @@ let navMenuList = [
         id: 6,
         icon: 'el-icon-s-shop',
         show: false,
+        meth:['查询'],
         component: ''
       },
       {
@@ -128,6 +132,7 @@ let navMenuList = [
         id: 7,
         icon: 'el-icon-s-platform',
         show: false,
+        meth:['查询'],
         component: ''
       },
       {
@@ -136,6 +141,7 @@ let navMenuList = [
         id: 8,
         icon: 'el-icon-files',
         show: false,
+        meth:['查询'],
         component: ''
       }
     ]
@@ -152,9 +158,10 @@ let navMenuList = [
       {
         path: '/Integrate',
         name: '综合服务',
-        id: 10,
+        id: 11,
         icon: 'el-icon-coin',
         show: false,
+        meth:['查询'],
         component: ''
       }
     ]
@@ -162,7 +169,7 @@ let navMenuList = [
   {
     path: '/Home',
     name: '资料中心',
-    id: 11,
+    id: 12,
     icon: 'el-icon-edit-outline',
     show: false,
     component: '',
@@ -170,25 +177,28 @@ let navMenuList = [
     children: [{
         path: '/Contract',
         name: '合同中心',
-        id: 12,
+        id: 13,
         icon: 'el-icon-folder-opened',
         show: false,
+        meth:['查询'],
         component: ''
       },
       {
         path: '/Customer',
         name: '贷款资料',
-        id: 13,
+        id: 14,
         icon: 'el-icon-user',
         show: false,
+        meth:['查询'],
         component: ''
       },
       {
         path: '/Enterprise',
         name: '企业资料',
-        id: 14,
+        id: 15,
         icon: 'el-icon-user',
         show: false,
+        meth:['查询'],
         component: ''
       }
     ]
@@ -196,7 +206,7 @@ let navMenuList = [
   {
     path: '/Home',
     name: '权限管控',
-    id: 15,
+    id: 16,
     icon: 'el-icon-setting',
     show: false,
     component: '',
@@ -205,25 +215,28 @@ let navMenuList = [
       {
         path: '/Client',
         name: '客户管理',
-        id: 16,
+        id: 17,
         icon: 'el-icon-user-solid',
         show: false,
+        meth:['查询'],
         component: ''
       },
       {
         path: '/Works',
         name: '员工管理',
-        id: 17,
+        id: 18,
         icon: 'el-icon-user-solid',
         show: false,
+        meth:['查询'],
         component: ''
       },
       {
         path: '/Roles',
         name: '身份管理',
-        id: 18,
+        id: 19,
         icon: 'el-icon-s-flag',
         show: false,
+        meth:['查询'],
         component: ''
       }
     ]
@@ -231,7 +244,7 @@ let navMenuList = [
   {
     path: '/Home',
     name: '系统中心',
-    id: 19,
+    id: 20,
     icon: 'el-icon-s-help',
     show: false,
     component: '',
@@ -239,9 +252,10 @@ let navMenuList = [
     children: [{
         path: '/Operation',
         name: '操作记录',
-        id: 20,
+        id: 21,
         icon: 'el-icon-view',
         show: false,
+        meth:['查询'],
         component: ''
       }
     ]
@@ -273,7 +287,6 @@ const AddNavMenu = async (model, data, ctx) => {
       })
     }
   }).catch(err => {
-    console.log(err)
     return500("创建导航菜单失败", err, ctx)
   })
 }
