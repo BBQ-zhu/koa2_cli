@@ -5,7 +5,7 @@ const contro = require('../controller/index') //操作数据库的公共方法�
 router.prefix(config.api + '/user')
 
 //jwt登录
-router.post('/loginUser', userCon.loginUser) 
+router.post('/loginuser', userCon.loginuser) 
 //获取图形验证码
 router.get('/getSvg', userCon.getSvg) 
 //查询用户
@@ -17,8 +17,9 @@ router.post('/updateUser', userCon.updateUser)
 //新增用户
 router.post('/createUser', userCon.createUser)
 //修改密码
-router.post('/updatePassword', userCon.updatePassword) 
+router.post('/updatePassword', userCon.updatePassword)
+//重置密码
+router.post('/resetPassword', userCon.resetPassword) 
 
 
 module.exports = router
- 
