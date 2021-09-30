@@ -8,18 +8,20 @@ const productSchema = new mongoose.Schema({
     },
     recommend: {
         type: String,
-        default: '0'
+        default: '不推荐'
     }, //不推荐 推荐
     name: String,
-    description: String,
+    description: String, //描述
     newprice: String,
     oldprice: String,
+    volume: String, //销量
+    productlogo: String,
     productimg: String,
+    consulting: String, //总计咨询
+    totalales: String, //总计销量
+    totalview: String, //总计浏览
     details: String,
-    time: {
-        type: String,
-        default: ''
-    }
+    time: String
 })
 const Product = mongoose.model('products', productSchema)
 
