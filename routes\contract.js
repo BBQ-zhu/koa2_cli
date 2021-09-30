@@ -6,7 +6,7 @@ const fs = require('fs')
 const Path = require('path')
 const control = require('../controller/index')
 const {
-  contract
+    contract
 } = require('../models/contract')
 const {
     return200,
@@ -14,10 +14,39 @@ const {
 } = require('../config/error')
 
 let dirname = {
-  contractDir: 'contracts'
+    contractDir: 'contracts'
 }
 
-//上传合同文档
+//手机上传合同文档
+router.post('/uploadPhoneContractImg', KoaBody({
+    multipart: true
+}), async (ctx) => {
+    var {
+        oldimgurl,
+        newimgurl
+    } = ctx.request.body
+    var path = 'public/uploads/' + dirname.contractDir + '/' + Date.now() + '.png';
+    var base64 = newimgurl.replace(/^data:image\/\w+;base64,/, ""); //去掉图片base64码前面部分data:image/png;base64
+    var dataBuffer = Buffer.from(base64, 'base64'); //把base64码转成buffer对象
+    fs.writeFileSync(path, dataBuffer, (err) => { //用fs写入文件
+        if (!err) {
+        //   console.log('base64写入失败')
+        }else{
+        //   console.log('base64写入成功')
+        }
+    })
+    if (oldimgurl) {
+        var nameArr = oldimgurl.split('/')
+        const filePath = Path.resolve('public/uploads/' + dirname.contractDir + '/' + nameArr[nameArr.length - 1]);
+        if (fs.existsSync(filePath)) {
+            fs.unlinkSync(filePath)
+        }
+    }
+    var FileName_dir = ctx.origin + path.replace('public', '')
+    return200('上传图片成功', FileName_dir, ctx)
+})
+
+//后台上传合同文档
 router.post('/uploadContractImg', KoaBody({
     multipart: true
 }), async (ctx) => {
@@ -30,7 +59,7 @@ router.post('/uploadContractImg', KoaBody({
         var nameArr = oldname.split('/')
         const filePath = Path.resolve('public/uploads/' + dirname.contractDir + '/' + nameArr[nameArr.length - 1]);
         if (fs.existsSync(filePath)) {
-            fs.unlinkSync(filePath);
+            fs.unlinkSync(filePath)
         }
     }
     await control.uploadFile(ctx, dirname.contractDir, name, path).then(res => {
@@ -54,7 +83,7 @@ router.post('/delContractImg', async ctx => {
     }
 })
 
-//上传产品信息
+//上传合同信息
 router.post('/uploadContract', async (ctx) => {
     let data = ctx.request.body
     data.time = new Date().toLocaleString()
@@ -65,7 +94,7 @@ router.post('/uploadContract', async (ctx) => {
     })
 })
 
-//查询产品信息
+//查询合同信息
 router.post('/findContract', async (ctx) => {
     let data = ctx.request.body
     var match = {}
@@ -77,6 +106,7 @@ router.post('/findContract', async (ctx) => {
     await contract.aggregate([{
                 $match: match
             }, //用于过滤数据
+            { $sort:{"time":-1} }, //倒叙排序
             {
                 $project: {
                     __v: 0
@@ -98,16 +128,14 @@ router.post('/findContract', async (ctx) => {
             }
         ])
         .then(rel => {
-            console.log(rel)
-            rel ? return200('招聘列表查询成功', rel, ctx) : return500('招聘列表查询失败', null, ctx)
+            rel ? return200('合同列表查询成功', rel, ctx) : return500('合同列表查询失败', null, ctx)
         })
         .catch(err => {
-            return500('招聘列表查询失败', err, ctx)
+            return500('合同列表查询失败', err, ctx)
         })
-
 })
 
-//删除产品信息
+//删除合同信息
 router.post('/delateContract', async (ctx) => {
     let data = ctx.request.body
     await contract.findOneAndDelete({
@@ -118,7 +146,7 @@ router.post('/delateContract', async (ctx) => {
         }
     })
 })
-//修改产品信息
+//修改合同信息
 router.post('/updataContract', async (ctx) => {
     let data = ctx.request.body
     await contract.findOneAndUpdate({
@@ -130,5 +158,16 @@ router.post('/updataContract', async (ctx) => {
     })
 })
 
+//查询单个合同信息
+router.post('/findOneContract', async (ctx) => {
+    let data = ctx.request.body
+    await contract.find({
+        _id: data._id
+    }).then(rel => {
+        if (rel) {
+            return200('查询成功', rel, ctx)
+        }
+    })
+})
 
 module.exports = router
