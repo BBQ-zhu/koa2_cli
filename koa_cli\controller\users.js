@@ -18,6 +18,7 @@ const findUser = async ctx => {
   await model.User.aggregate([{
         $match: match
       }, //用于过滤数据
+      { $sort:{"time":-1} }, //倒叙排序
       {
         $project: {
           password: 0,
@@ -40,7 +41,6 @@ const findUser = async ctx => {
       }
     ])
     .then(rel => {
-      console.log(rel)
       rel ? return200('查询成功', rel, ctx) : return500('查询失败', null, ctx)
     })
     .catch(err => {
@@ -61,7 +61,7 @@ const deleteUser = async ctx => {
     })
 }
 
-const updateUser = async ctx => {
+const updateUser = async ctx => { 
   let uid = ctx.request.body.uid
   let data = {
     username,
@@ -80,11 +80,11 @@ const updateUser = async ctx => {
     })
 }
 
-const loginUser = async ctx => {
+const loginuser = async ctx => {
   ctx.verifyParams({ //校验参数
     uid: {
       type: 'string',
-      required: true
+      required: true 
     },
     password: {
       type: 'string',
@@ -94,6 +94,33 @@ const loginUser = async ctx => {
 
   let data = ctx.request.body
   await contro.AddNavMenu(model.User, data, ctx)
+}
+//重置密码
+const resetPassword = async ctx => {
+  ctx.verifyParams({ //校验参数
+    uid: {
+      type: 'string',
+      required: true
+    },
+    newPassword: {
+      type: 'string',
+      required: true
+    }
+  })
+
+  let data = ctx.request.body
+  let newData = {
+    password: data.newPassword
+  }
+  await model.User.findOneAndUpdate({
+    uid: data.uid
+  }, newData).then(rel => {
+    if (rel) {
+      return200('重置密码成功', null, ctx)
+    }
+  }).catch(err => {
+    return500('重置密码失败', err, ctx)
+  })
 }
 
 const updatePassword = async ctx => {
@@ -121,7 +148,6 @@ const updatePassword = async ctx => {
     password: data.oldPassword
   }, newData).then(rel => {
     if (rel) {
-      console.log(rel)
       return200('修改密码成功', null, ctx)
     }
   }).catch(err => {
@@ -235,7 +261,8 @@ module.exports = {
   deleteUser,
   updateUser,
   findUser,
-  loginUser,
+  loginuser,
   updatePassword,
+  resetPassword,
   getSvg
 }
