@@ -22,6 +22,7 @@ router.post('/findCustomer', async ctx => {
   await customer.aggregate([{
         $match: match
       }, //用于过滤数据
+      { $sort:{"time":-1} }, //倒叙排序
       {
         $project: {
           __v: 0
@@ -43,7 +44,6 @@ router.post('/findCustomer', async ctx => {
       }
     ])
     .then(rel => {
-      console.log(rel)
       rel ? return200('招聘列表查询成功', rel, ctx) : return500('招聘列表查询失败', null, ctx)
     })
     .catch(err => {
@@ -108,6 +108,7 @@ router.post('/findEnterprise', async ctx => {
   await enterprise.aggregate([{
         $match: match
       }, //用于过滤数据
+      { $sort:{"time":-1} }, //倒叙排序
       {
         $project: {
           __v: 0
@@ -129,7 +130,6 @@ router.post('/findEnterprise', async ctx => {
       }
     ])
     .then(rel => {
-      console.log(rel)
       rel ? return200('招聘列表查询成功', rel, ctx) : return500('招聘列表查询失败', null, ctx)
     })
     .catch(err => {
