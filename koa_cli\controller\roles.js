@@ -46,7 +46,7 @@ const delRole = async ctx=>{
 
 const updateRole = async ctx=>{
   let data = ctx.request.body
-  await roles.findByIdAndUpdate({_id:data._id},{roleList:data.roleList}).then(rel=>{
+  await roles.findByIdAndUpdate({_id:data._id},{roleList:data.roleList,navList:data.navList}).then(rel=>{
     if(rel){
       return200('更新角色成功',null,ctx)
     }else{
@@ -59,10 +59,8 @@ const updateRole = async ctx=>{
 
 const findRole = async ctx=>{
   let data = ctx.request.body
-  console.log(data)
   await roles.find(data).then(rel=>{
     if(rel){
-      console.log(rel)
       return200('查询角色成功',rel,ctx)
     }else{
       return500('查询角色失败',null,ctx)
@@ -74,7 +72,6 @@ const findRole = async ctx=>{
 
 const findOneRole = async ctx=>{
   let data = ctx.request.body
-  console.log(data)
   await roles.findOne(data).then(rel=>{
     if(rel){
       return200('查询角色成功',rel,ctx)
