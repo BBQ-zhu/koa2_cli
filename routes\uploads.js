@@ -7,9 +7,9 @@ router.prefix(config.api + '/uploads')
 //上传员工图片(假上传)
 router.post('/userImg',KoaBody({multipart: true}),uploads.userImg)
 //上传员工图片(真上传)
-router.post('/uploadImg',uploads.uploadImg)
+router.post('/uploadUserImg',KoaBody({multipart: true}),uploads.uploadUserImg)
 //删除图片
-router.post('/delateImg', uploads.delateImg)
+router.post('/delateUserImg', uploads.delateUserImg)
 
 //上传视频封面
 router.post('/uploadVideoImg',KoaBody({multipart: true}),uploads.uploadVideoImg)
@@ -25,7 +25,7 @@ router.post('/delateVideo',uploads.delateVideo)
 //上传轮播图
 router.post('/uploadScrollImg',KoaBody({multipart: true}),uploads.uploadScrollImg)
 //查询轮播图
-router.get('/findScrollImg',uploads.findScrollImg)
+router.post('/findScrollImg',uploads.findScrollImg)
 //删除轮播图
 router.post('/delateScrollImg',uploads.delateScrollImg)
 
