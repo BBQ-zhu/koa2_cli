@@ -49,6 +49,12 @@ app.use(koajwt({
     /^\/api\/uploads\/findRecruiting/,
     /^\/api\/vipuser\/checkCodeVipuser/,
     /^\/api\/logs\/createlogs/,
+    /^\/api\/user\/findUser/,
+    /^\/api\/contract\/uploadPhoneContractImg/,
+    /^\/api\/informations\/findNews/,
+    /^\/api\/service\/createIntegrate/,
+    /^\/api\/agents\/createAgent/,
+    /^\/api\/agents\/findAgent/
   ]
 }));
 
@@ -63,8 +69,9 @@ const customer = require('./routes/customer')
 const integrate = require('./routes/integrate')
 const contract = require('./routes/contract')
 const agents = require('./routes/agents')
-const vipUser = require('./routes/Mobile/vipUser') //手机用户
+const vipUser = require('./routes/Mobile/vipUser') //手机用户 
 const logs = require('./routes/logs')
+const internal = require('./routes/internal')
 
 app.use(KoaBody())
 
@@ -109,11 +116,12 @@ app.use(uploads.routes(), uploads.allowedMethods())
 app.use(informations.routes(), informations.allowedMethods())
 app.use(product.routes(), product.allowedMethods())
 app.use(customer.routes(), customer.allowedMethods())
-app.use(integrate.routes(), integrate.allowedMethods()) 
-app.use(contract.routes(), contract.allowedMethods()) 
+app.use(integrate.routes(), integrate.allowedMethods())
+app.use(contract.routes(), contract.allowedMethods())
 app.use(agents.routes(), agents.allowedMethods())
 app.use(vipUser.routes(), vipUser.allowedMethods())
 app.use(logs.routes(), logs.allowedMethods())
+app.use(internal.routes(), internal.allowedMethods())
 
 // error-handling
 app.on('error', (err, ctx) => {
