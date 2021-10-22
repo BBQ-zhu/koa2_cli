@@ -43,6 +43,7 @@ const classSchema = new mongoose.Schema({
         type: String,
         default: ''
     }, //导航图标
+    remaks:String
 })
 const productClass = mongoose.model('productclass', classSchema)
 
