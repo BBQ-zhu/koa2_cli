@@ -14,7 +14,7 @@ const {
     roles
 } = require('../models/roles')
 const {
-    User 
+    User
 } = require('../models/users')
 const fs = require('fs')
 const path = require('path')
@@ -44,7 +44,7 @@ const uploadFile = (ctx, dir, name, path) => {
         // 创建文件输出流
         const fileWriter = fs.createWriteStream(filepath);
         // 写入文件数据
-        fileReader.pipe(fileWriter); 
+        fileReader.pipe(fileWriter);
         resolve(FileName_dir)
     })
 }
@@ -68,7 +68,7 @@ const login = (model, data, ctx) => (
             arr.token = token
             return200('登录成功', arr, ctx)
         } else {
-            return500('登录失败', null, ctx)
+            return500('登录失败:账号或密码错误', null, ctx)
         }
     })
     .catch(err => {
@@ -94,11 +94,11 @@ let adminUser = {
 //为admin用户增加角色的权限
 let adminRole = {
     "rolename": "超级管理员",
-    "roleList": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21],
+    "roleList": ['1-0','1-1','1-2','2-0','2-1','2-2','2-3','2-4','2-5','2-6','3-0','3-1','4-0','4-1','4-2','4-3','5-0','5-1','5-2','5-3','6-0','6-1'],
     "navList": [{
         "path": "/Home",
         "name": "首页",
-        "id": "1",
+        "id": "1-0",
         "icon": "el-icon-menu",
         "show": "false",
         "component": "",
@@ -106,16 +106,24 @@ let adminRole = {
         "children": [{
             "path": "/Agents",
             "name": "代办中心",
-            "id": "2",
+            "id": "1-1",
             "icon": "el-icon-bell",
             "show": "false",
             "meth": ["新增", "删除", "修改", "查询"],
             "component": ""
+        }, {
+            "path": '/Statistics',
+            "name": '统计中心',
+            "id": "1-2",
+            "icon": 'el-icon-data-line',
+            "show": "false",
+            "meth": ['新增', '删除', '修改', '查询'],
+            "component": ''
         }]
     }, {
         "path": "/Home",
         "name": "前端管理",
-        "id": "3",
+        "id": "2-0",
         "icon": "el-icon-s-data",
         "show": "false",
         "component": "",
@@ -123,7 +131,7 @@ let adminRole = {
         "children": [{
             "path": "/ScroImage",
             "name": "轮播图片",
-            "id": "4",
+            "id": "2-1",
             "icon": "el-icon-picture",
             "show": "false",
             "meth": ["新增", "删除", "修改", "查询"],
@@ -131,7 +139,7 @@ let adminRole = {
         }, {
             "path": "/WebControl",
             "name": "新闻管理",
-            "id": "5",
+            "id": "2-2",
             "icon": "el-icon-notebook-2",
             "show": "false",
             "meth": ["新增", "删除", "修改", "查询"],
@@ -139,7 +147,7 @@ let adminRole = {
         }, {
             "path": "/Product",
             "name": "产品管理",
-            "id": "6",
+            "id": "2-3",
             "icon": "el-icon-s-shop",
             "show": "false",
             "meth": ["新增", "删除", "修改", "查询"],
@@ -147,7 +155,7 @@ let adminRole = {
         }, {
             "path": "/EntrSchool",
             "name": "创业学堂",
-            "id": "7",
+            "id": "2-4",
             "icon": "el-icon-s-platform",
             "show": "false",
             "meth": ["新增", "删除", "修改", "查询"],
@@ -155,16 +163,24 @@ let adminRole = {
         }, {
             "path": "/Recruiting",
             "name": "招聘专区",
-            "id": "8",
+            "id": "2-5",
             "icon": "el-icon-files",
             "show": "false",
             "meth": ["新增", "删除", "修改", "查询"],
             "component": ""
+        },{
+            "path": '/Information',
+            "name": '内部资料',
+            "id": '2-6',
+            "icon": 'el-icon-folder',
+            "show": "false",
+            "meth": ['新增', '删除', '修改', '查询'],
+            "component": ''
         }]
     }, {
         "path": "/Home",
         "name": "业务中心",
-        "id": "9",
+        "id": "3-0",
         "icon": "el-icon-s-grid",
         "show": "false",
         "component": "",
@@ -172,7 +188,7 @@ let adminRole = {
         "children": [{
             "path": "/Integrate",
             "name": "综合服务",
-            "id": "11",
+            "id": "3-1",
             "icon": "el-icon-coin",
             "show": "false",
             "meth": ["新增", "删除", "修改", "查询"],
@@ -181,7 +197,7 @@ let adminRole = {
     }, {
         "path": "/Home",
         "name": "资料中心",
-        "id": "12",
+        "id": "4-0",
         "icon": "el-icon-edit-outline",
         "show": "false",
         "component": "",
@@ -189,7 +205,7 @@ let adminRole = {
         "children": [{
             "path": "/Contract",
             "name": "合同中心",
-            "id": "13",
+            "id": "4-1",
             "icon": "el-icon-folder-opened",
             "show": "false",
             "meth": ["新增", "删除", "修改", "查询"],
@@ -197,7 +213,7 @@ let adminRole = {
         }, {
             "path": "/Customer",
             "name": "贷款资料",
-            "id": "14",
+            "id": "4-2",
             "icon": "el-icon-user",
             "show": "false",
             "meth": ["新增", "删除", "修改", "查询"],
@@ -205,7 +221,7 @@ let adminRole = {
         }, {
             "path": "/Enterprise",
             "name": "企业资料",
-            "id": "15",
+            "id": "4-3",
             "icon": "el-icon-user",
             "show": "false",
             "meth": ["新增", "删除", "修改", "查询"],
@@ -214,7 +230,7 @@ let adminRole = {
     }, {
         "path": "/Home",
         "name": "权限管控",
-        "id": "16",
+        "id": "5-0",
         "icon": "el-icon-setting",
         "show": "false",
         "component": "",
@@ -222,7 +238,7 @@ let adminRole = {
         "children": [{
             "path": "/Client",
             "name": "客户管理",
-            "id": "17",
+            "id": "5-1",
             "icon": "el-icon-user-solid",
             "show": "false",
             "meth": ["新增", "删除", "修改", "查询"],
@@ -230,7 +246,7 @@ let adminRole = {
         }, {
             "path": "/Works",
             "name": "员工管理",
-            "id": "18",
+            "id": "5-2",
             "icon": "el-icon-user-solid",
             "show": "false",
             "meth": ["新增", "删除", "修改", "查询"],
@@ -238,7 +254,7 @@ let adminRole = {
         }, {
             "path": "/Roles",
             "name": "身份管理",
-            "id": "19",
+            "id": "5-3",
             "icon": "el-icon-s-flag",
             "show": "false",
             "meth": ["新增", "删除", "修改", "查询"],
@@ -247,7 +263,7 @@ let adminRole = {
     }, {
         "path": "/Home",
         "name": "系统中心",
-        "id": "20",
+        "id": "6-0",
         "icon": "el-icon-s-help",
         "show": "false",
         "component": "",
@@ -255,7 +271,7 @@ let adminRole = {
         "children": [{
             "path": "/Operation",
             "name": "操作记录",
-            "id": "21",
+            "id": "6-1",
             "icon": "el-icon-view",
             "show": "false",
             "meth": ["新增", "删除", "修改", "查询"],
@@ -267,7 +283,7 @@ let adminRole = {
 let navMenuList = [{
         path: '/Home',
         name: '首页',
-        id: 1,
+        id: '1-0',
         icon: 'el-icon-menu',
         show: false,
         component: '',
@@ -275,8 +291,16 @@ let navMenuList = [{
         children: [{
             path: '/Agents',
             name: '代办中心',
-            id: 2,
+            id: '1-1',
             icon: 'el-icon-bell',
+            show: false,
+            meth: ['新增', '删除', '修改', '查询'],
+            component: ''
+        }, {
+            path: '/Statistics',
+            name: '统计中心',
+            id: '1-2',
+            icon: 'el-icon-data-line',
             show: false,
             meth: ['新增', '删除', '修改', '查询'],
             component: ''
@@ -285,7 +309,7 @@ let navMenuList = [{
     {
         path: '/Home',
         name: '前端管理',
-        id: 3,
+        id: '2-0',
         icon: 'el-icon-s-data',
         show: false,
         component: '',
@@ -293,7 +317,7 @@ let navMenuList = [{
         children: [{
                 path: '/ScroImage',
                 name: '轮播图片',
-                id: 4,
+                id: '2-1',
                 icon: 'el-icon-picture',
                 show: false,
                 meth: ['新增', '删除', '修改', '查询'],
@@ -302,7 +326,7 @@ let navMenuList = [{
             {
                 path: '/WebControl',
                 name: '新闻管理',
-                id: 5,
+                id: '2-2',
                 icon: 'el-icon-notebook-2',
                 show: false,
                 meth: ['新增', '删除', '修改', '查询'],
@@ -311,7 +335,7 @@ let navMenuList = [{
             {
                 path: '/Product',
                 name: '产品管理',
-                id: 6,
+                id: '2-3',
                 icon: 'el-icon-s-shop',
                 show: false,
                 meth: ['新增', '删除', '修改', '查询'],
@@ -320,7 +344,7 @@ let navMenuList = [{
             {
                 path: '/EntrSchool',
                 name: '创业学堂',
-                id: 7,
+                id: '2-4',
                 icon: 'el-icon-s-platform',
                 show: false,
                 meth: ['新增', '删除', '修改', '查询'],
@@ -329,8 +353,17 @@ let navMenuList = [{
             {
                 path: '/Recruiting',
                 name: '招聘专区',
-                id: 8,
+                id: '2-5',
                 icon: 'el-icon-files',
+                show: false,
+                meth: ['新增', '删除', '修改', '查询'],
+                component: ''
+            },
+            {
+                path: '/Information',
+                name: '内部资料',
+                id: '2-6',
+                icon: 'el-icon-folder',
                 show: false,
                 meth: ['新增', '删除', '修改', '查询'],
                 component: ''
@@ -340,7 +373,7 @@ let navMenuList = [{
     {
         path: '/Home',
         name: '业务中心',
-        id: 9,
+        id: '3-0',
         icon: 'el-icon-s-grid',
         show: false,
         component: '',
@@ -348,7 +381,7 @@ let navMenuList = [{
         children: [{
             path: '/Integrate',
             name: '综合服务',
-            id: 11,
+            id: '3-1',
             icon: 'el-icon-coin',
             show: false,
             meth: ['新增', '删除', '修改', '查询'],
@@ -358,7 +391,7 @@ let navMenuList = [{
     {
         path: '/Home',
         name: '资料中心',
-        id: 12,
+        id: '4-0',
         icon: 'el-icon-edit-outline',
         show: false,
         component: '',
@@ -366,7 +399,7 @@ let navMenuList = [{
         children: [{
                 path: '/Contract',
                 name: '合同中心',
-                id: 13,
+                id: '4-1',
                 icon: 'el-icon-folder-opened',
                 show: false,
                 meth: ['新增', '删除', '修改', '查询'],
@@ -375,8 +408,8 @@ let navMenuList = [{
             {
                 path: '/Customer',
                 name: '贷款资料',
-                id: 14,
-                icon: 'el-icon-user',
+                id: '4-2',
+                icon: 'el-icon-document-copy',
                 show: false,
                 meth: ['新增', '删除', '修改', '查询'],
                 component: ''
@@ -384,8 +417,8 @@ let navMenuList = [{
             {
                 path: '/Enterprise',
                 name: '企业资料',
-                id: 15,
-                icon: 'el-icon-user',
+                id: '4-3',
+                icon: 'el-icon-s-home',
                 show: false,
                 meth: ['新增', '删除', '修改', '查询'],
                 component: ''
@@ -395,7 +428,7 @@ let navMenuList = [{
     {
         path: '/Home',
         name: '权限管控',
-        id: 16,
+        id: '5-0',
         icon: 'el-icon-setting',
         show: false,
         component: '',
@@ -403,8 +436,8 @@ let navMenuList = [{
         children: [{
                 path: '/Client',
                 name: '客户管理',
-                id: 17,
-                icon: 'el-icon-user-solid',
+                id: '5-1',
+                icon: 'el-icon-s-custom',
                 show: false,
                 meth: ['新增', '删除', '修改', '查询'],
                 component: ''
@@ -412,7 +445,7 @@ let navMenuList = [{
             {
                 path: '/Works',
                 name: '员工管理',
-                id: 18,
+                id: '5-2',
                 icon: 'el-icon-user-solid',
                 show: false,
                 meth: ['新增', '删除', '修改', '查询'],
@@ -421,8 +454,8 @@ let navMenuList = [{
             {
                 path: '/Roles',
                 name: '身份管理',
-                id: 19,
-                icon: 'el-icon-s-flag',
+                id: '5-3',
+                icon: 'el-icon-s-management',
                 show: false,
                 meth: ['新增', '删除', '修改', '查询'],
                 component: ''
@@ -432,7 +465,7 @@ let navMenuList = [{
     {
         path: '/Home',
         name: '系统中心',
-        id: 20,
+        id: '6-0',
         icon: 'el-icon-s-help',
         show: false,
         component: '',
@@ -440,7 +473,7 @@ let navMenuList = [{
         children: [{
             path: '/Operation',
             name: '操作记录',
-            id: 21,
+            id: '6-1',
             icon: 'el-icon-view',
             show: false,
             meth: ['新增', '删除', '修改', '查询'],
@@ -455,34 +488,53 @@ const AddNavMenu = async (model, data, ctx) => {
         "navMenuList": navMenuList
     }
     //初始化时创建超级管理员用户和权限
-    await roles.findOne({"rolename": "超级管理员"}).then(async res => {
+    await roles.findOne({
+        "rolename": "超级管理员"
+    }).then(async res => {
         if (res) {
-            await User.findOne({"role": "超级管理员"}).then(async rel => {
-                if(!rel){
+            await User.findOne({
+                "role": "超级管理员"
+            }).then(async rel => {
+                if (!rel) {
                     await User.create(adminUser)
                 }
             })
         } else {
-            await User.findOne({"role": "超级管理员"}).then(async rev => {
-                if(rev){
+            await User.findOne({
+                "role": "超级管理员"
+            }).then(async rev => {
+                if (rev) {
                     await roles.create(adminRole)
-                }else{
+                } else {
                     await User.create(adminUser)
                     await roles.create(adminRole)
                 }
             })
         }
     })
+    // 每次登录时重新更新超级管理员的信息
     // await roles.findOneAndReplace({
     //     "rolename": "超级管理员"
-    // }, adminRole).then(async res => {
+    // },adminRole).then(async res => {
     //     if (res) {
     //         await User.findOneAndReplace({
     //             "role": "超级管理员"
-    //         }, adminUser)
+    //         },adminUser).then(async rel => {
+    //             if (!rel) {
+    //                 await User.create(adminUser)
+    //             }
+    //         })
     //     } else {
-    //         await roles.create(adminRole)
-    //         await User.create(adminUser)
+    //         await User.findOneAndReplace({
+    //             "role": "超级管理员"
+    //         },adminUser).then(async rev => {
+    //             if (rev) {
+    //                 await roles.create(adminRole)
+    //             } else {
+    //                 await User.create(adminUser)
+    //                 await roles.create(adminRole)
+    //             }
+    //         })
     //     }
     // })
     await navMenu.findOneAndReplace({
@@ -508,7 +560,7 @@ const AddNavMenu = async (model, data, ctx) => {
         return500("创建导航菜单失败", err, ctx)
     })
 }
- 
+
 module.exports = {
     AddNavMenu,
     login,
