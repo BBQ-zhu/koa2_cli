@@ -25,14 +25,18 @@ router.post('/uploadPhoneContractImg', KoaBody({
         oldimgurl,
         newimgurl
     } = ctx.request.body
+    const fileDir = `${__dirname}/../public/uploads/${dirname.contractDir}`;
+    if (!fs.existsSync(fileDir)) { //如果没有这个文件夹就创建一个
+        fs.mkdirSync(fileDir);
+    } 
     var path = 'public/uploads/' + dirname.contractDir + '/' + Date.now() + '.png';
     var base64 = newimgurl.replace(/^data:image\/\w+;base64,/, ""); //去掉图片base64码前面部分data:image/png;base64
     var dataBuffer = Buffer.from(base64, 'base64'); //把base64码转成buffer对象
     fs.writeFileSync(path, dataBuffer, (err) => { //用fs写入文件
         if (!err) {
-        //   console.log('base64写入失败')
-        }else{
-        //   console.log('base64写入成功')
+            //   console.log('base64写入失败')
+        } else {
+            //   console.log('base64写入成功')
         }
     })
     if (oldimgurl) {
@@ -52,7 +56,7 @@ router.post('/uploadContractImg', KoaBody({
 }), async (ctx) => {
     let oldname = ctx.request.body.imgurl
     let {
-        name,
+        name, 
         path
     } = ctx.request.files.file
     if (oldname) {
@@ -77,16 +81,14 @@ router.post('/delContractImg', async ctx => {
     const filePath = Path.resolve('public/uploads/' + dirname.contractDir + '/' + nameArr[nameArr.length - 1]);
     if (fs.existsSync(filePath)) {
         fs.unlinkSync(filePath);
-        return200('删除图片成功', null, ctx)
-    } else {
-        return500('删除图片失败', null, ctx)
     }
+    return200('删除图片成功', null, ctx)
 })
 
 //上传合同信息
 router.post('/uploadContract', async (ctx) => {
     let data = ctx.request.body
-    data.time = new Date().toLocaleString()
+    data.time = new Date().toLocaleDateString() +' '+ new Date().toLocaleTimeString().slice(2)
     await contract.create(data).then(rel => {
         return200('新增成功', rel, ctx)
     }).catch(err => {
@@ -106,7 +108,11 @@ router.post('/findContract', async (ctx) => {
     await contract.aggregate([{
                 $match: match
             }, //用于过滤数据
-            { $sort:{"time":-1} }, //倒叙排序
+            {
+                $sort: {
+                    "time": -1
+                }
+            }, //倒叙排序
             {
                 $project: {
                     __v: 0
