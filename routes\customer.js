@@ -21,6 +21,11 @@ router.post('/findCustomer', async ctx => {
             $regex: data.input
         }
     }
+    if(data.teamname){
+        match[data.team] = {
+            $regex: data.teamname
+        }
+    }
     await customer.aggregate([{
                 $match: match
             }, //用于过滤数据
@@ -50,10 +55,10 @@ router.post('/findCustomer', async ctx => {
             }
         ])
         .then(rel => {
-            rel ? return200('招聘列表查询成功', rel, ctx) : return500('招聘列表查询失败', null, ctx)
+            rel ? return200('客户列表查询成功', rel, ctx) : return500('客户列表查询失败', null, ctx)
         })
         .catch(err => {
-            return500('招聘列表查询失败', err, ctx)
+            return500('客户列表查询失败', err, ctx)
         })
 
 })
