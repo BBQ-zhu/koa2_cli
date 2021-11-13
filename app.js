@@ -54,7 +54,8 @@ app.use(koajwt({
     /^\/api\/informations\/findNews/,
     /^\/api\/service\/createIntegrate/,
     /^\/api\/agents\/createAgent/,
-    /^\/api\/agents\/findAgent/
+    /^\/api\/agents\/findAgent/,
+    /^\/api\/contract\/findContract/
   ]
 }));
 
