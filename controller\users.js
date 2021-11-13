@@ -15,6 +15,11 @@ const findUser = async ctx => {
             $regex: data.input
         }
     }
+    if(data.teamname){
+        match[data.team] = {
+            $regex: data.teamname
+        }
+    }
     await model.User.aggregate([{
                 $match: match
             }, //用于过滤数据
