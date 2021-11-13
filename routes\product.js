@@ -99,7 +99,7 @@ router.post('/delProductImg', async ctx => {
 
 //上传产品信息
 router.post('/uploadProduct', async (ctx) => {
-    let data = ctx.request.body
+    let data = JSON.parse(ctx.request.body.data)
     data.time = new Date().toLocaleDateString() +' '+ new Date().toLocaleTimeString().slice(2)
     await Product.create(data).then(rel => {
         return200('新增成功', rel, ctx)
@@ -176,7 +176,7 @@ router.post('/delateProduct', async (ctx) => {
 })
 //修改产品信息
 router.post('/updataProduct', async (ctx) => {
-    let data = ctx.request.body
+    let data = JSON.parse(ctx.request.body.data)
     await Product.findOneAndUpdate({
         _id: data._id
     }, data).then(rel => {
