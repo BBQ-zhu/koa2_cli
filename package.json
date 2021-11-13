@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@alicloud/pop-core": "^1.7.10",
+    "crypto": "^1.0.1",
     "debug": "^4.1.1",
     "image-tools": "^1.4.0",
     "jsonwebtoken": "^8.5.1",
