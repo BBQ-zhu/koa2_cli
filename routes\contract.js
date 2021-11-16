@@ -28,7 +28,7 @@ router.post('/uploadPhoneContractImg', KoaBody({
     const fileDir = `${__dirname}/../public/uploads/${dirname.contractDir}`;
     if (!fs.existsSync(fileDir)) { //如果没有这个文件夹就创建一个
         fs.mkdirSync(fileDir);
-    } 
+    }
     var path = 'public/uploads/' + dirname.contractDir + '/' + Date.now() + '.png';
     var base64 = newimgurl.replace(/^data:image\/\w+;base64,/, ""); //去掉图片base64码前面部分data:image/png;base64
     var dataBuffer = Buffer.from(base64, 'base64'); //把base64码转成buffer对象
@@ -56,7 +56,7 @@ router.post('/uploadContractImg', KoaBody({
 }), async (ctx) => {
     let oldname = ctx.request.body.imgurl
     let {
-        name, 
+        name,
         path
     } = ctx.request.files.file
     if (oldname) {
@@ -75,12 +75,14 @@ router.post('/uploadContractImg', KoaBody({
 
 router.post('/delContractImg', async ctx => {
     let {
-        productimg
+        imgurl
     } = ctx.request.body
-    var nameArr = productimg.split('/')
-    const filePath = Path.resolve('public/uploads/' + dirname.contractDir + '/' + nameArr[nameArr.length - 1]);
-    if (fs.existsSync(filePath)) {
-        fs.unlinkSync(filePath);
+    if (imgurl) {
+        var nameArr = imgurl.split('/')
+        const filePath = Path.resolve('public/uploads/' + dirname.contractDir + '/' + nameArr[nameArr.length - 1]);
+        if (fs.existsSync(filePath)) {
+            fs.unlinkSync(filePath);
+        }
     }
     return200('删除图片成功', null, ctx)
 })
@@ -88,7 +90,7 @@ router.post('/delContractImg', async ctx => {
 //上传合同信息
 router.post('/uploadContract', async (ctx) => {
     let data = ctx.request.body
-    data.time = new Date().toLocaleDateString() +' '+ new Date().toLocaleTimeString().slice(2)
+    data.time = new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString().slice(2)
     await contract.create(data).then(rel => {
         return200('新增成功', rel, ctx)
     }).catch(err => {
@@ -106,33 +108,33 @@ router.post('/findContract', async (ctx) => {
         }
     }
     await contract.aggregate([{
-                $match: match
-            }, //用于过滤数据
-            {
-                $sort: {
-                    "time": -1
-                }
-            }, //倒叙排序
-            {
-                $project: {
-                    __v: 0
-                }
+        $match: match
+    }, //用于过滤数据
+    {
+        $sort: {
+            "time": -1
+        }
+    }, //倒叙排序
+    {
+        $project: {
+            __v: 0
+        }
+    },
+    {
+        "$facet": {
+            "total": [{
+                "$count": "total"
+            }],
+            "data": [{
+                "$skip": Number(data.skip)
             },
             {
-                "$facet": {
-                    "total": [{
-                        "$count": "total"
-                    }],
-                    "data": [{
-                            "$skip": Number(data.skip)
-                        },
-                        {
-                            "$limit": Number(data.limit)
-                        }
-                    ]
-                }
+                "$limit": Number(data.limit)
             }
-        ])
+            ]
+        }
+    }
+    ])
         .then(rel => {
             rel ? return200('合同列表查询成功', rel, ctx) : return500('合同列表查询失败', null, ctx)
         })
