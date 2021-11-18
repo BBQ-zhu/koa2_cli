@@ -1,9 +1,17 @@
-更新过的文件：
-前端：
+一：vue_pc
+src\components\Product.vue
+src\views\ProductDetail.vue
+src\views\Index.vue
 
-后端：
+二：uniapp_cli
+src\pages\index\index.vue
 
-忘了传视频routers
+三：koa_cli
+routes\contract.js
+controller\roles.js
+以及判断文件夹是否存在，删除图片fs.un
+
+前端文件中的config.js 文件夹
 
 
 教学网址：https://blog.csdn.net/weixin_46182770/article/details/112974311
