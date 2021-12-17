@@ -17,10 +17,11 @@ let dirname = {
     contractDir: 'contracts'
 }
 
+// KoaBody({
+//     multipart: true
+// }), 
 //手机上传合同文档
-router.post('/uploadPhoneContractImg', KoaBody({
-    multipart: true
-}), async (ctx) => {
+router.post('/uploadPhoneContractImg',async (ctx) => {
     var {
         oldimgurl,
         newimgurl
