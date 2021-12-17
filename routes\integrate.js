@@ -12,7 +12,7 @@ const {
 //新增咨询客户
 router.post('/createIntegrate', async ctx => {
     let data = ctx.request.body
-    data.time = new Date().toLocaleDateString() +' '+ new Date().toLocaleTimeString().slice(2)
+    data.time = new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString().slice(2)
     await integrate.create(data).then(rel => {
         return200('新增成功', rel, ctx)
     }).catch(err => {
@@ -24,6 +24,22 @@ router.post('/createIntegrate', async ctx => {
 router.post('/findIntegrate', async ctx => {
     let data = ctx.request.body
     var match = {}
+    if(data.category){
+        if(data.category == '我的客户'){
+            match['$or']=[{status:''},{status:'待审核'},{status:'审核中'},{status:'驳回'},{status:'拒绝'},{status:'通过'}]
+            match['manager1'] = data.uid
+        }else if(data.category == '公海客户'){
+            match['$or']=[{status:'待审核'},{status:'审核中'},{status:'驳回'},{status:'拒绝'},{status:'通过'}]
+            match['manager1'] = ''
+        }else if(data.category == '全部客户'){
+            //不需要做操作
+        }
+    }
+    if(data.classType){
+        match[data.classTypename] = {
+            $regex: data.classType
+        }
+    }
     if (data.input) {
         match[data.fuzz] = {
             $regex: data.input
@@ -58,10 +74,10 @@ router.post('/findIntegrate', async ctx => {
             }
         ])
         .then(rel => {
-            rel ? return200('招聘列表查询成功', rel, ctx) : return500('招聘列表查询失败', null, ctx)
+            rel ? return200('综合服务列表查询成功', rel, ctx) : return500('综合服务列表查询失败', null, ctx)
         })
         .catch(err => {
-            return500('招聘列表查询失败', err, ctx)
+            return500('综合服务列表查询失败', err, ctx)
         })
 
 })
