@@ -12,7 +12,7 @@ const {
 //新增代办
 router.post('/createAgent', async ctx => {
     let data = ctx.request.body
-    data.time = new Date().toLocaleDateString() +' '+ new Date().toLocaleTimeString().slice(2)
+    data.time = new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString().slice(2)
     await agents.create(data).then(rel => {
         return200('新增成功', rel, ctx)
     }).catch(err => {
@@ -29,33 +29,34 @@ router.post('/findAgent', async ctx => {
             $regex: data.input
         }
     }
-    await agents.aggregate([{
-                $match: match
-            }, //用于过滤数据
-            {
-                $sort: {
-                    "time": -1
-                }
-            }, //倒叙排序
-            {
-                $project: {
-                    __v: 0
-                }
-            },
-            {
-                "$facet": {
-                    "total": [{
-                        "$count": "total"
-                    }],
-                    "data": [{
-                            "$skip": Number(data.skip)
-                        },
-                        {
-                            "$limit": Number(data.limit)
-                        }
-                    ]
-                }
+    await agents.aggregate(
+        [{
+            $match: match
+        }, //用于过滤数据
+        {
+            $sort: {
+                "time": -1
             }
+        }, //倒叙排序
+        {
+            $project: {
+                __v: 0
+            }
+        },
+        {
+            "$facet": {
+                "total": [{
+                    "$count": "total"
+                }],
+                "data": [{
+                    "$skip": Number(data.skip)
+                },
+                {
+                    "$limit": Number(data.limit)
+                }
+                ]
+            }
+        }
         ])
         .then(rel => {
             rel ? return200('代办列表查询成功', rel, ctx) : return500('代办列表查询失败', null, ctx)
