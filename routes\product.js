@@ -52,10 +52,12 @@ router.post('/delProductLogo', async ctx => {
     let {
         productlogo
     } = ctx.request.body
-    var nameArr = productlogo.split('/')
-    const filePath = Path.resolve('public/uploads/' + dirname.productlogoDir + '/' + nameArr[nameArr.length - 1]);
-    if (fs.existsSync(filePath)) {
-        fs.unlinkSync(filePath);
+    if (productlogo) {
+        var nameArr = productlogo.split('/')
+        const filePath = Path.resolve('public/uploads/' + dirname.productlogoDir + '/' + nameArr[nameArr.length - 1]);
+        if (fs.existsSync(filePath)) {
+            fs.unlinkSync(filePath);
+        }
     }
     return200('删除图片成功', null, ctx)
 })
@@ -89,10 +91,12 @@ router.post('/delProductImg', async ctx => {
     let {
         productimg
     } = ctx.request.body
-    var nameArr = productimg.split('/')
-    const filePath = Path.resolve('public/uploads/' + dirname.productDir + '/' + nameArr[nameArr.length - 1]);
-    if (fs.existsSync(filePath)) {
-        fs.unlinkSync(filePath);
+    if (productimg) {
+        var nameArr = productimg.split('/')
+        const filePath = Path.resolve('public/uploads/' + dirname.productDir + '/' + nameArr[nameArr.length - 1]);
+        if (fs.existsSync(filePath)) {
+            fs.unlinkSync(filePath);
+        }
     }
     return200('删除图片成功', null, ctx)
 })
@@ -100,7 +104,8 @@ router.post('/delProductImg', async ctx => {
 //上传产品信息
 router.post('/uploadProduct', async (ctx) => {
     let data = JSON.parse(ctx.request.body.data)
-    data.time = new Date().toLocaleDateString() +' '+ new Date().toLocaleTimeString().slice(2)
+    console.log(data)
+    data.time = new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString().slice(2)
     await Product.create(data).then(rel => {
         return200('新增成功', rel, ctx)
     }).catch(err => {
@@ -113,8 +118,8 @@ router.post('/findProduct', async (ctx) => {
     let data = ctx.request.body
     if (data.findAll) {
         await Product.find().then(rel => {
-                rel ? return200('产品列表查询成功', rel, ctx) : return500('产品列表查询失败', null, ctx)
-            })
+            rel ? return200('产品列表查询成功', rel, ctx) : return500('产品列表查询失败', null, ctx)
+        })
             .catch(err => {
                 return500('产品列表查询失败', err, ctx)
             })
@@ -126,33 +131,33 @@ router.post('/findProduct', async (ctx) => {
             }
         }
         await Product.aggregate([{
-                    $match: match
-                }, //用于过滤数据
-                {
-                    $sort: {
-                        "time": -1
-                    }
-                }, //倒叙排序
-                {
-                    $project: {
-                        __v: 0
-                    }
+            $match: match
+        }, //用于过滤数据
+        {
+            $sort: {
+                "time": -1
+            }
+        }, //倒叙排序
+        {
+            $project: {
+                __v: 0
+            }
+        },
+        {
+            "$facet": {
+                "total": [{
+                    "$count": "total"
+                }],
+                "data": [{
+                    "$skip": Number(data.skip)
                 },
                 {
-                    "$facet": {
-                        "total": [{
-                            "$count": "total"
-                        }],
-                        "data": [{
-                                "$skip": Number(data.skip)
-                            },
-                            {
-                                "$limit": Number(data.limit)
-                            }
-                        ]
-                    }
+                    "$limit": Number(data.limit)
                 }
-            ])
+                ]
+            }
+        }
+        ])
             .then(rel => {
                 rel ? return200('产品列表查询成功', rel, ctx) : return500('产品列表查询失败', null, ctx)
             })
@@ -177,6 +182,7 @@ router.post('/delateProduct', async (ctx) => {
 //修改产品信息
 router.post('/updataProduct', async (ctx) => {
     let data = JSON.parse(ctx.request.body.data)
+    console.log(data)
     await Product.findOneAndUpdate({
         _id: data._id
     }, data).then(rel => {
@@ -207,10 +213,12 @@ router.post('/delIconlImg', async ctx => {
     let {
         imgurl
     } = ctx.request.body
-    var nameArr = imgurl.split('/')
-    const filePath = Path.resolve('public/uploads/' + dirname.iconlImgDir + '/' + nameArr[nameArr.length - 1]);
-    if (fs.existsSync(filePath)) {
-        fs.unlinkSync(filePath);
+    if (imgurl) {
+        var nameArr = imgurl.split('/')
+        const filePath = Path.resolve('public/uploads/' + dirname.iconlImgDir + '/' + nameArr[nameArr.length - 1]);
+        if (fs.existsSync(filePath)) {
+            fs.unlinkSync(filePath);
+        }
     }
     return200('删除图片成功', null, ctx)
 })
@@ -255,7 +263,7 @@ router.post('/delProductClass', async (ctx) => {
 //上传招聘信息
 router.post('/uploadRecruiting', async (ctx) => {
     let data = ctx.request.body
-    data.time = new Date().toLocaleDateString() +' '+ new Date().toLocaleTimeString().slice(2)
+    data.time = new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString().slice(2)
     await Recruiting.create(data).then(rel => {
         return200('新增成功', rel, ctx)
     }).catch(err => {
@@ -271,33 +279,33 @@ router.post('/findRecruiting', async (ctx) => {
     //   match[data.fuzz] = {$regex:data.input}
     // }
     await Recruiting.aggregate([{
-                $match: match
-            }, //用于过滤数据
-            {
-                $sort: {
-                    "time": -1
-                }
-            }, //倒叙排序
-            {
-                $project: {
-                    __v: 0
-                }
+        $match: match
+    }, //用于过滤数据
+    {
+        $sort: {
+            "time": -1
+        }
+    }, //倒叙排序
+    {
+        $project: {
+            __v: 0
+        }
+    },
+    {
+        "$facet": {
+            "total": [{
+                "$count": "total"
+            }],
+            "data": [{
+                "$skip": Number(data.skip)
             },
             {
-                "$facet": {
-                    "total": [{
-                        "$count": "total"
-                    }],
-                    "data": [{
-                            "$skip": Number(data.skip)
-                        },
-                        {
-                            "$limit": Number(data.limit)
-                        }
-                    ]
-                }
+                "$limit": Number(data.limit)
             }
-        ])
+            ]
+        }
+    }
+    ])
         .then(rel => {
             rel ? return200('招聘列表查询成功', rel, ctx) : return500('招聘列表查询失败', null, ctx)
         })
