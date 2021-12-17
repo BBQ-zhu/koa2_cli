@@ -38,12 +38,12 @@ const delateScrollImg = async (ctx) => {
     await scroimgs.findOneAndDelete({
         _id
     }).then(rel => {
-        if(rel){
+        if (rel) {
             if (fs.existsSync(filePath)) {
                 fs.unlinkSync(filePath);
             }
             return200('删除成功', rel, ctx)
-        }else{
+        } else {
             return500('删除失败', '', ctx)
         }
     })
@@ -105,29 +105,31 @@ const delateVideoImg = async (ctx) => {
     let {
         videoImg
     } = ctx.request.body
-    var nameArr = videoImg.split('/')
-    const filePath = Path.resolve('public/uploads/' + dirname.schoolVideoImgDir + '/' + nameArr[nameArr.length - 1]);
-    if (fs.existsSync(filePath)) {
-        fs.unlinkSync(filePath);
+    if (videoImg) {
+        var nameArr = videoImg.split('/')
+        const filePath = Path.resolve('public/uploads/' + dirname.schoolVideoImgDir + '/' + nameArr[nameArr.length - 1]);
+        if (fs.existsSync(filePath)) {
+            fs.unlinkSync(filePath);
+        }
     }
     return200('删除图片成功', null, ctx)
 }
 
 const delateVideo = async (ctx) => {
     let {
-        _id, 
+        _id,
         fileName
     } = ctx.request.body
     const filePath = Path.resolve('public/uploads/' + dirname.schoolVideoDir + '/' + fileName);
     await Video.findOneAndDelete({
         _id
     }).then(rel => {
-        if(rel){
+        if (rel) {
             if (fs.existsSync(filePath)) {
                 fs.unlinkSync(filePath);
             }
             return200('删除成功', rel, ctx)
-        }else{
+        } else {
             return500('删除失败', '', ctx)
         }
     })
