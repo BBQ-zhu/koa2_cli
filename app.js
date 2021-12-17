@@ -12,8 +12,10 @@ const koajwt = require('koa-jwt'); //所有接口校验token
 const config = require('./config') //常量库
 const MongoConnect = require('./db')() //建立数据库连接
 
-// const logs = require('./controller/logs') //操作日志中间件
+const {scheduleCronstyle} = require('./controller/schedule') //定时任务(刷新公海客户)
+scheduleCronstyle()
 
+// const logs = require('./controller/logs') //操作日志中间件
 // app.use(logs())
 
 // 中间件对token进行验证 注意：放在路由前面
@@ -55,7 +57,8 @@ app.use(koajwt({
     /^\/api\/service\/createIntegrate/,
     /^\/api\/agents\/createAgent/,
     /^\/api\/agents\/findAgent/,
-    /^\/api\/contract\/findContract/
+    /^\/api\/contract\/findContract/,
+    /^\/api\/statistics\/findStatistics/
   ]
 }));
 
@@ -72,9 +75,14 @@ const contract = require('./routes/contract')
 const agents = require('./routes/agents')
 const vipUser = require('./routes/Mobile/vipUser') //手机用户 
 const logs = require('./routes/logs')
-const internal = require('./routes/internal')
+const internal = require('./routes/internal') 
+const mortgages = require('./routes/mortgages') 
+const statistic = require('./routes/statistic')
 
-app.use(KoaBody())
+app.use(KoaBody({
+  formLimit:"10mb",
+  jsonLimit:"10mb"
+}))
 
 // app.use(KoaBody({ //放到路由下面，注意顺序
 //   multipart: true, //是否允许上传文件
@@ -123,8 +131,9 @@ app.use(agents.routes(), agents.allowedMethods())
 app.use(vipUser.routes(), vipUser.allowedMethods())
 app.use(logs.routes(), logs.allowedMethods())
 app.use(internal.routes(), internal.allowedMethods())
-
-// error-handling
+app.use(mortgages.routes(), mortgages.allowedMethods())
+app.use(statistic.routes(), statistic.allowedMethods())
+// error-handling 
 app.on('error', (err, ctx) => {
   console.error('server error:', err, ctx)
 });
