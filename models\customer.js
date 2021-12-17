@@ -20,8 +20,6 @@ const customerSchema = new mongoose.Schema({
     },
     addressdetail: String, //现居地址详情
     hires: String, //雇佣类型
-    invoicing: String, //年开票金额
-    paying: String, //年缴税金额
     unit: String, //工作单位名称
     unitposition: String, //工作岗位
     unitadress: String, //单位地址
@@ -51,6 +49,7 @@ const customerSchema = new mongoose.Schema({
     policy: String, //有无商业保单
     policyname: String, //投保公司名称
     policyear: String, //已投保年限
+    paymentmethod: String, //缴费方式
     policypre: String, //缴费金额
     creditip: String, //征信是否白名单
     lawsuits: String, //是否有官司
@@ -70,8 +69,8 @@ const customerSchema = new mongoose.Schema({
     conrelat4: String, //联系人的关系4
     hometeam: String, //归属团队
     manager1: String, //客户经理
-    manager2: String, //权证经理
-    manager3: String, //审核经理
+    manager2: String, //金融客服
+    manager3: String, //代办客服
     status: String, //审核状态
     remarks: String, //备注信息
     time: String, //创建时间
@@ -79,8 +78,21 @@ const customerSchema = new mongoose.Schema({
     microcredit: String, //微粒贷
     credit: String, //信用卡
     tobacco: String, //烟草证
-    enterprise: String, //企业税贷
-    ticket: String, //企业票贷
+    tobaccotime: String, //烟草证办证时间
+    volumesmoke: String, //烟草证月开烟量
+    tobaccorank: String, //烟草证等级
+    identity: String, //法人/股东
+    enterprise: String, //法人变更
+    ticket: String, //法人占股
+    invoicing: String, //年开票金额
+    paying: String, //年缴税金额
+    taxrecord: String, //开票记录
+    grade: String, //纳税等级
+    establishment: String, //企业成立时间
+    feedback: String, //审批反馈
+    productList: Array, //匹配产品列表
+    recomMony: Number, //匹配产品最高可贷金额
+    schedate: Number, //审核时间
 })
 
 const customer = mongoose.model('customers', customerSchema)
