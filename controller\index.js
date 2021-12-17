@@ -89,12 +89,13 @@ let adminUser = {
     "address": "", //家庭住址
     "isrecomed": "否", //是否推荐至咨询顾问
     "intro": "", //顾问介绍
+    "seedata":"是", //大数据权限
     "remarks": "", //备注
 }
 //为admin用户增加角色的权限
 let adminRole = {
     "rolename": "超级管理员",
-    "roleList": ['1-0','1-1','1-2','2-0','2-1','2-2','2-3','2-4','2-5','2-6','3-0','3-1','4-0','4-1','4-2','4-3','5-0','5-1','5-2','5-3','6-0','6-1'],
+    "roleList": ['1-0', '1-1', '1-2', '2-0', '2-1', '2-2', '2-3', '2-4', '2-5', '2-6', '3-0', '3-1', '4-0', '4-1', '4-2', '4-3','4-4', '5-0', '5-1', '5-2', '5-3', '6-0', '6-1'],
     "navList": [{
         "path": "/Home",
         "name": "首页",
@@ -168,7 +169,7 @@ let adminRole = {
             "show": "false",
             "meth": ["新增", "删除", "修改", "查询"],
             "component": ""
-        },{
+        }, {
             "path": '/Information',
             "name": '内部资料',
             "id": '2-6',
@@ -212,7 +213,7 @@ let adminRole = {
             "component": ""
         }, {
             "path": "/Customer",
-            "name": "贷款资料",
+            "name": "贷款客户",
             "id": "4-2",
             "icon": "el-icon-user",
             "show": "false",
@@ -220,9 +221,17 @@ let adminRole = {
             "component": ""
         }, {
             "path": "/Enterprise",
-            "name": "企业资料",
+            "name": "企业客户",
             "id": "4-3",
             "icon": "el-icon-user",
+            "show": "false",
+            "meth": ["新增", "删除", "修改", "查询"],
+            "component": ""
+        }, {
+            "path": "/Mortgage",
+            "name": "抵押客户",
+            "id": "4-4",
+            "icon": "el-icon-s-check",
             "show": "false",
             "meth": ["新增", "删除", "修改", "查询"],
             "component": ""
@@ -407,7 +416,7 @@ let navMenuList = [{
             },
             {
                 path: '/Customer',
-                name: '贷款资料',
+                name: '贷款客户',
                 id: '4-2',
                 icon: 'el-icon-document-copy',
                 show: false,
@@ -416,12 +425,20 @@ let navMenuList = [{
             },
             {
                 path: '/Enterprise',
-                name: '企业资料',
+                name: '企业客户',
                 id: '4-3',
                 icon: 'el-icon-s-home',
                 show: false,
                 meth: ['新增', '删除', '修改', '查询'],
                 component: ''
+            }, {
+                path: "/Mortgage",
+                name: "抵押客户",
+                id: "4-4",
+                icon: "el-icon-s-check",
+                show: "false",
+                meth: ["新增", "删除", "修改", "查询"],
+                component: ""
             }
         ]
     },
