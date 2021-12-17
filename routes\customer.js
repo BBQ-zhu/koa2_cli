@@ -16,44 +16,54 @@ const {
 router.post('/findCustomer', async ctx => {
     let data = ctx.request.body
     var match = {}
-    if (data.input) {
-        match[data.fuzz] = {
-            $regex: data.input
+    if (data.category) {
+        if (data.category == '我的客户') {
+            match['$or'] = [{ status: '待审核' }, { status: '审核中' }, { status: '驳回' }, { status: '拒绝' }, { status: '通过' }]
+            match['manager2'] = data.uid
+        } else if (data.category == '公海客户') {
+            match['$or'] = [{ status: '待审核' }, { status: '审核中' }, { status: '驳回' }, { status: '拒绝' }, { status: '通过' }]
+            match['manager2'] = ''
+        } else if (data.category == '全部客户') {
+            //不需要做操作
         }
     }
-    if(data.teamname){
-        match[data.team] = {
-            $regex: data.teamname
+    if (data.input) {
+        if (data.only) { //传参带only为true的必须全等
+            match[data.fuzz] = data.input
+        } else {
+            match[data.fuzz] = {
+                $regex: data.input
+            }
         }
     }
     await customer.aggregate([{
-                $match: match
-            }, //用于过滤数据
-            {
-                $sort: {
-                    "time": -1
-                }
-            }, //倒叙排序
-            {
-                $project: {
-                    __v: 0
-                }
+        $match: match
+    }, //用于过滤数据
+    {
+        $sort: {
+            "time": -1
+        }
+    }, //倒叙排序
+    {
+        $project: {
+            __v: 0
+        }
+    },
+    {
+        "$facet": {
+            "total": [{
+                "$count": "total"
+            }],
+            "data": [{
+                "$skip": Number(data.skip)
             },
             {
-                "$facet": {
-                    "total": [{
-                        "$count": "total"
-                    }],
-                    "data": [{
-                            "$skip": Number(data.skip)
-                        },
-                        {
-                            "$limit": Number(data.limit)
-                        }
-                    ]
-                }
+                "$limit": Number(data.limit)
             }
-        ])
+            ]
+        }
+    }
+    ])
         .then(rel => {
             rel ? return200('客户列表查询成功', rel, ctx) : return500('客户列表查询失败', null, ctx)
         })
@@ -65,7 +75,7 @@ router.post('/findCustomer', async ctx => {
 //新增客户信息
 router.post('/createCustomer', async ctx => {
     let data = ctx.request.body
-    data.time = new Date().toLocaleDateString() +' '+ new Date().toLocaleTimeString().slice(2)
+    data.time = new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString().slice(2)
     await customer.create(data).then(rel => {
         return200('新增成功', rel, ctx)
     }).catch(err => {
@@ -101,7 +111,7 @@ router.post('/deleteCustomer', async ctx => {
 //新增企业资料
 router.post('/createEnterprise', async ctx => {
     let data = ctx.request.body
-    data.time = new Date().toLocaleDateString() +' '+ new Date().toLocaleTimeString().slice(2)
+    data.time = new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString().slice(2)
     await enterprise.create(data).then(rel => {
         return200('新增成功', rel, ctx)
     }).catch(err => {
@@ -113,39 +123,60 @@ router.post('/createEnterprise', async ctx => {
 router.post('/findEnterprise', async ctx => {
     let data = ctx.request.body
     var match = {}
-    if (data.input) {
-        match[data.fuzz] = {
-            $regex: data.input
+    if (data.category) {
+        if (data.category == '我的客户') {
+            match['$or'] = [{ status: '待审核' }, { status: '审核中' }, { status: '驳回' }, { status: '拒绝' }, { status: '通过' }]
+            match['manager2'] = data.uid
+        } else if (data.category == '公海客户') {
+            match['$or'] = [{ status: '待审核' }, { status: '审核中' }, { status: '驳回' }, { status: '拒绝' }, { status: '通过' }]
+            match['manager2'] = ''
+        } else if (data.category == '全部客户') {
+            //不需要做操作
         }
     }
+    if (data.classType) {
+        match[data.classTypename] = {
+            $regex: data.classType
+        }
+    }
+    if (data.input) {
+        if (data.only) {
+            match[data.fuzz] = data.input
+        } else {
+            match[data.fuzz] = {
+                $regex: data.input
+            }
+        }
+
+    }
     await enterprise.aggregate([{
-                $match: match
-            }, //用于过滤数据
-            {
-                $sort: {
-                    "time": -1
-                }
-            }, //倒叙排序
-            {
-                $project: {
-                    __v: 0
-                }
+        $match: match
+    }, //用于过滤数据
+    {
+        $sort: {
+            "time": -1
+        }
+    }, //倒叙排序
+    {
+        $project: {
+            __v: 0
+        }
+    },
+    {
+        "$facet": {
+            "total": [{
+                "$count": "total"
+            }],
+            "data": [{
+                "$skip": Number(data.skip)
             },
             {
-                "$facet": {
-                    "total": [{
-                        "$count": "total"
-                    }],
-                    "data": [{
-                            "$skip": Number(data.skip)
-                        },
-                        {
-                            "$limit": Number(data.limit)
-                        }
-                    ]
-                }
+                "$limit": Number(data.limit)
             }
-        ])
+            ]
+        }
+    }
+    ])
         .then(rel => {
             rel ? return200('招聘列表查询成功', rel, ctx) : return500('招聘列表查询失败', null, ctx)
         })
