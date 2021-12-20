@@ -58,7 +58,9 @@ app.use(koajwt({
     /^\/api\/agents\/createAgent/,
     /^\/api\/agents\/findAgent/,
     /^\/api\/contract\/findContract/,
-    /^\/api\/statistics\/findStatistics/
+    /^\/api\/statistics\/findStatistics/,
+    /^\/api\/statistics\/createStatistics/,
+    /^\/api\/statistics\/updateStatistics/
   ]
 }));
 
