@@ -89,7 +89,8 @@ let adminUser = {
     "address": "", //家庭住址
     "isrecomed": "否", //是否推荐至咨询顾问
     "intro": "", //顾问介绍
-    "seedata":"是", //大数据权限
+    "seedata":"是", //客户查询
+    "seeall":"是", //全部客户
     "remarks": "", //备注
 }
 //为admin用户增加角色的权限
@@ -436,7 +437,7 @@ let navMenuList = [{
                 name: "抵押客户",
                 id: "4-4",
                 icon: "el-icon-s-check",
-                show: "false",
+                show: false,
                 meth: ["新增", "删除", "修改", "查询"],
                 component: ""
             }
