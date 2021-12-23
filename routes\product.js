@@ -105,7 +105,7 @@ router.post('/delProductImg', async ctx => {
 router.post('/uploadProduct', async (ctx) => {
     let data = JSON.parse(ctx.request.body.data)
     console.log(data)
-    data.time = new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString().slice(2)
+    data.time = `${new Date().getFullYear()}/${new Date().getMonth()+1}/${new Date().getDate()} ${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}`
     await Product.create(data).then(rel => {
         return200('新增成功', rel, ctx)
     }).catch(err => {
@@ -128,6 +128,11 @@ router.post('/findProduct', async (ctx) => {
         if (data.input) {
             match[data.fuzz] = {
                 $regex: data.input
+            }
+        }
+        if(data.selectInput){
+            match['type'] = {
+                $regex: data.selectInput
             }
         }
         await Product.aggregate([{
@@ -263,7 +268,7 @@ router.post('/delProductClass', async (ctx) => {
 //上传招聘信息
 router.post('/uploadRecruiting', async (ctx) => {
     let data = ctx.request.body
-    data.time = new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString().slice(2)
+    data.time = `${new Date().getFullYear()}/${new Date().getMonth()+1}/${new Date().getDate()} ${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}`
     await Recruiting.create(data).then(rel => {
         return200('新增成功', rel, ctx)
     }).catch(err => {
