@@ -10,10 +10,14 @@ const KoaBody = require('koa-body') //解析接口请求的参数
 const parameter = require('koa-parameter') //校验请求的参数
 const koajwt = require('koa-jwt'); //所有接口校验token
 const config = require('./config') //常量库
+const control = require('./controller/index')
 const MongoConnect = require('./db')() //建立数据库连接
 
-const {scheduleCronstyle} = require('./controller/schedule') //定时任务(刷新公海客户)
+const {scheduleCronstyle} = require('./controller/schedule') //定时任务(刷新公海客户并删除重复数据)
 scheduleCronstyle()
+
+const {datas} = require('./controller/datatime') //刷新时间脚本
+datas()
 
 // const logs = require('./controller/logs') //操作日志中间件
 // app.use(logs())
@@ -101,7 +105,6 @@ app.use(KoaBody({
 //     }
 //   }
 // }));
-
 
 // error 错误处理
 app.use(Cors());
