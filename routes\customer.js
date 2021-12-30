@@ -9,7 +9,8 @@ const {
 router.prefix(config.api + '/customer')
 const {
     return200,
-    return500
+    return500,
+    dateTime
 } = require('../config/error')
 
 //查询客户信息
@@ -31,8 +32,12 @@ router.post('/findCustomer', async ctx => {
         if (data.only) { //传参带only为true的必须全等
             match[data.fuzz] = data.input
         } else {
-            match[data.fuzz] = {
-                $regex: data.input
+            if(data.fuzz == 'schedate'){
+                match[data.fuzz] = parseInt(data.input)
+            }else{
+                match[data.fuzz] = {
+                    $regex: data.input
+                }
             }
         }
     }
@@ -75,7 +80,7 @@ router.post('/findCustomer', async ctx => {
 //新增客户信息
 router.post('/createCustomer', async ctx => {
     let data = ctx.request.body
-    data.time = new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString().slice(2)
+    data.time = dateTime()
     await customer.create(data).then(rel => {
         return200('新增成功', rel, ctx)
     }).catch(err => {
@@ -85,6 +90,7 @@ router.post('/createCustomer', async ctx => {
 //更新客户信息
 router.post('/updateCustomer', async ctx => {
     let data = ctx.request.body
+    data.time = dateTime()
     await customer.findOneAndUpdate({
         _id: data._id
     }, data).then(rel => {
@@ -111,7 +117,7 @@ router.post('/deleteCustomer', async ctx => {
 //新增企业资料
 router.post('/createEnterprise', async ctx => {
     let data = ctx.request.body
-    data.time = new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString().slice(2)
+    data.time = dateTime()
     await enterprise.create(data).then(rel => {
         return200('新增成功', rel, ctx)
     }).catch(err => {
@@ -143,9 +149,16 @@ router.post('/findEnterprise', async ctx => {
         if (data.only) {
             match[data.fuzz] = data.input
         } else {
-            match[data.fuzz] = {
-                $regex: data.input
+            if(data.fuzz == 'schedate'){
+                match[data.fuzz] = parseInt(data.input)
+            }else{
+                match[data.fuzz] = {
+                    $regex: data.input
+                }
             }
+            // match[data.fuzz] = {
+            //     $regex: data.input
+            // }
         }
 
     }
@@ -189,6 +202,7 @@ router.post('/findEnterprise', async ctx => {
 //更新客户信息
 router.post('/updateEnterprise', async ctx => {
     let data = ctx.request.body
+    data.time = dateTime()
     await enterprise.findOneAndUpdate({
         _id: data._id
     }, data).then(rel => {
