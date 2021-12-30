@@ -14,7 +14,8 @@ const {
 } = require('../models/product')
 const {
     return200,
-    return500
+    return500,
+    dateTime
 } = require('../config/error')
 
 let dirname = {
@@ -104,8 +105,7 @@ router.post('/delProductImg', async ctx => {
 //上传产品信息
 router.post('/uploadProduct', async (ctx) => {
     let data = JSON.parse(ctx.request.body.data)
-    console.log(data)
-    data.time = `${new Date().getFullYear()}/${new Date().getMonth()+1}/${new Date().getDate()} ${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}`
+    data.time = dateTime()
     await Product.create(data).then(rel => {
         return200('新增成功', rel, ctx)
     }).catch(err => {
@@ -187,7 +187,7 @@ router.post('/delateProduct', async (ctx) => {
 //修改产品信息
 router.post('/updataProduct', async (ctx) => {
     let data = JSON.parse(ctx.request.body.data)
-    console.log(data)
+    data.time = dateTime()
     await Product.findOneAndUpdate({
         _id: data._id
     }, data).then(rel => {
@@ -268,7 +268,7 @@ router.post('/delProductClass', async (ctx) => {
 //上传招聘信息
 router.post('/uploadRecruiting', async (ctx) => {
     let data = ctx.request.body
-    data.time = `${new Date().getFullYear()}/${new Date().getMonth()+1}/${new Date().getDate()} ${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}`
+    data.time = dateTime()
     await Recruiting.create(data).then(rel => {
         return200('新增成功', rel, ctx)
     }).catch(err => {
@@ -333,6 +333,7 @@ router.post('/delateRecruiting', async (ctx) => {
 //修改招聘信息
 router.post('/updataRecruiting', async (ctx) => {
     let data = ctx.request.body
+    data.time = dateTime()
     await Recruiting.findOneAndUpdate({
         _id: data._id
     }, data).then(rel => {
