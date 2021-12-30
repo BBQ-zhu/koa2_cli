@@ -6,13 +6,14 @@ const {
 router.prefix(config.api + '/service')
 const {
     return200,
-    return500
+    return500,
+    dateTime
 } = require('../config/error')
 
 //新增咨询客户
 router.post('/createIntegrate', async ctx => {
     let data = ctx.request.body
-    data.time = new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString().slice(2)
+    data.time = dateTime()
     await integrate.create(data).then(rel => {
         return200('新增成功', rel, ctx)
     }).catch(err => {
@@ -41,8 +42,12 @@ router.post('/findIntegrate', async ctx => {
         }
     }
     if (data.input) {
-        match[data.fuzz] = {
-            $regex: data.input
+        if(data.fuzz == 'schedate'){
+            match[data.fuzz] = parseInt(data.input)
+        }else{
+            match[data.fuzz] = {
+                $regex: data.input
+            }
         }
     }
     await integrate.aggregate([{
@@ -85,6 +90,7 @@ router.post('/findIntegrate', async ctx => {
 //更新咨询客户
 router.post('/updateIntegrate', async ctx => {
     let data = ctx.request.body
+    data.time = dateTime()
     await integrate.findOneAndUpdate({
         _id: data._id
     }, data).then(rel => {
