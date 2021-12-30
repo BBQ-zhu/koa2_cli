@@ -6,13 +6,14 @@ const {
 router.prefix(config.api + '/customer')
 const {
     return200,
-    return500
+    return500,
+    dateTime
 } = require('../config/error')
 
 //新增抵押客户
 router.post('/createMortgages', async ctx => {
     let data = ctx.request.body
-    data.time = new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString().slice(2)
+    data.time = dateTime()
     await mortgages.create(data).then(rel => {
         return200('新增成功', rel, ctx)
     }).catch(err => {
@@ -70,6 +71,7 @@ router.post('/findMortgages', async ctx => {
 //更新抵押客户
 router.post('/updateMortgages', async ctx => {
   let data = ctx.request.body
+  data.time = dateTime()
   await mortgages.findOneAndUpdate({
     _id: data._id
   }, data).then(rel => {
