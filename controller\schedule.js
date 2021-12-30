@@ -1,3 +1,6 @@
+/***
+ * 自动化脚本，每天定时清理意向客户中的公海客户重复的数据，只保留最新数据
+ */
 const schedule = require('node-schedule');
 const {
   integrate
@@ -39,10 +42,30 @@ const checkData = async (tabel, manager) => {
               await integrate.aggregate([{
                 $match: obj //用于过滤数据
               }]).then(res => {
-                res.map(async item => {
-                  await integrate.findOneAndDelete({
-                    _id: item._id
-                  })
+                res.map(async val => {
+                  if (val.type == item.type && val.type != '意向客户') {
+                    await integrate.findOneAndDelete({
+                      _id: val._id
+                    })
+                  } else if (
+                    val.type == item.type &&
+                    val.type == '意向客户' &&
+                    val.proname == '金融客户'
+                  ) {
+                    await integrate.findOneAndDelete({
+                      _id: val._id
+                    })
+                  } else if (
+                    val.type == item.type &&
+                    val.type == '意向客户' &&
+                    val.proname == '企业客户' &&
+                    val.comtype == item.comtype
+                  ) {
+                    await integrate.findOneAndDelete({
+                      _id: val._id
+                    })
+                  }
+                  
                 })
               })
             }
