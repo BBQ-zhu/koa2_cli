@@ -10,7 +10,8 @@ const {
 } = require('../models/contract')
 const {
     return200,
-    return500
+    return500,
+    dateTime
 } = require('../config/error')
 
 let dirname = {
@@ -91,7 +92,7 @@ router.post('/delContractImg', async ctx => {
 //上传合同信息
 router.post('/uploadContract', async (ctx) => {
     let data = ctx.request.body
-    data.time = new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString().slice(2)
+    data.time = dateTime()
     await contract.create(data).then(rel => {
         return200('新增成功', rel, ctx)
     }).catch(err => {
@@ -106,6 +107,11 @@ router.post('/findContract', async (ctx) => {
     if (data.input) {
         match[data.fuzz] = {
             $regex: data.input
+        }
+    }
+    if (data.type) {
+        match['type'] = {
+            $regex: data.type
         }
     }
     await contract.aggregate([{
