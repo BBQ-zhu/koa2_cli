@@ -11,14 +11,54 @@ const {
 const {
   enterprise
 } = require('../models/enterprise')
+const {
+  logs
+} = require('../models/logs')
 const scheduleCronstyle = () => {
   //每天1点1分30秒的时候执行:
-  schedule.scheduleJob('30 1 1 * * *', () => {
-    console.log('scheduleCronstyle:' + new Date());
-    checkData(integrate, 'manager1')
-    checkData(customer, 'manager2')
-    checkData(enterprise, 'manager2')
+  schedule.scheduleJob('30 1 2 * * *', async () => {
+     await checkData(integrate, 'manager1')
+     await checkData(customer, 'manager2')
+     await checkData(enterprise, 'manager2')
+     await delLogs()
   });
+}
+
+const delLogs = async () => {
+  await logs.aggregate([{
+    $match: {}
+  }, //用于过滤数据
+  {
+    $sort: {
+      "time": -1
+    }
+  }, //倒叙排序
+  {
+    $project: {
+      __v: 0
+    }
+  },
+  {
+    "$facet": {
+      "total": [{
+        "$count": "total"
+      }],
+      "data": [{
+        "$skip": Number(66666)
+      }]
+    }
+  }
+  ])
+    .then(rel => {
+      if (rel[0].total[0].total > 0) {
+        let arr = rel[0].data
+        arr.forEach(async item => {
+          await logs.findOneAndDelete({
+            _id: item._id
+          })
+        })
+      }
+    })
 }
 
 const checkData = async (tabel, manager) => {
@@ -30,7 +70,7 @@ const checkData = async (tabel, manager) => {
   }]).then(rel => {
     if (rel) {
       rel.map(async item => {
-        if (item.schedate && item.schedate>=0) {
+        if (item.schedate && item.schedate >= 0) {
           item.schedate -= 1
           if (!item.schedate) {
             //只有综合服务才需要入公海时去重
@@ -65,14 +105,14 @@ const checkData = async (tabel, manager) => {
                       _id: val._id
                     })
                   }
-                  
+
                 })
               })
             }
             item[manager] = ''
           }
         } else {
-          item.schedate = 6
+          item.schedate = 14
         }
         await tabel.findOneAndUpdate({
           _id: item._id
@@ -86,18 +126,18 @@ module.exports = {
   scheduleCronstyle
 }
 
-// 任务定时器
-// schedule.scheduleJob('30 * * * * *', () => {
-//   console.log('scheduleCronstyle:' + new Date());
-// });
-// 每分钟的第30秒触发： '30 * * * * *'
+ // 任务定时器
+ // schedule.scheduleJob('30 * * * * *', () => {
+ //   console.log('scheduleCronstyle:' + new Date());
+ // });
+ // 每分钟的第30秒触发： '30 * * * * *'
 
-// 每小时的1分30秒触发 ：'30 1 * * * *'
+ // 每小时的1分30秒触发 ：'30 1 * * * *'
 
-// 每天的凌晨1点1分30秒触发 ：'30 1 1 * * *'
+ // 每天的凌晨1点1分30秒触发 ：'30 1 1 * * *'
 
-// 每月的1日1点1分30秒触发 ：'30 1 1 1 * *'
+ // 每月的1日1点1分30秒触发 ：'30 1 1 1 * *'
 
-// 2016年的1月1日1点1分30秒触发 ：'30 1 1 1 2016 *'
+ // 2016年的1月1日1点1分30秒触发 ：'30 1 1 1 2016 *'
 
-// 每周1的1点1分30秒触发 ：'30 1 1 * * 1'
+ // 每周1的1点1分30秒触发 ：'30 1 1 * * 1'
